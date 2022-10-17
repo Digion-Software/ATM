@@ -155,8 +155,8 @@ class DescriptionTextView extends StatelessWidget {
   const DescriptionTextView(
       {Key? key,
         required this.data,
-        this.rightPadding = 5,
-        this.leftPadding = 5,
+        this.rightPadding = 0,
+        this.leftPadding = 0,
         this.topPadding = 5,
         this.bottomPadding = 5,
         this.fontWeight,

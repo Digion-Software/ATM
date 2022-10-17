@@ -1,4 +1,3 @@
-import 'package:atm/config/app_colors.dart';
 import 'package:atm/config/app_text_style.dart';
 import 'package:flutter/material.dart';
 

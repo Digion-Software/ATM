@@ -15,8 +15,8 @@ class ButtonView extends StatelessWidget {
       this.topPadding = 15,
       this.bottomPadding = 15,
       this.bottomMargin = 0,
-      this.leftMargin = 15,
-      this.rightMargin = 15,
+      this.leftMargin = 10,
+      this.rightMargin = 10,
       this.topMargin = 0,
       this.textColor,
       this.buttonColor = AppColors.primaryColor})
@@ -41,6 +41,7 @@ class ButtonView extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
+        height: 50,
         padding: EdgeInsets.only(top: topPadding, bottom: bottomPadding, left: leftPadding, right: rightPadding),
         margin: EdgeInsets.only(top: topMargin, bottom: bottomMargin, left: leftMargin, right: rightMargin),
         decoration: BoxDecoration(
@@ -72,13 +73,13 @@ class BackArrowButtonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: IconButton(
-        onPressed: () {
+      child: InkWell(
+        onTap: () {
           if (isEnable) {
             PageNavigator.pop(context: context);
           }
         },
-        icon: Icon(
+        child: Icon(
           icon,
           color: color,
         ),

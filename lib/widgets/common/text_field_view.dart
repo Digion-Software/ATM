@@ -41,3 +41,99 @@ class TextFieldView extends StatelessWidget {
     );
   }
 }
+
+class CommonTextField extends StatelessWidget {
+  const CommonTextField({
+    Key? key,
+    required this.title,
+    required this.hintText,
+    required this.isObscure,
+    required this.controller,
+    this.keyBoardType,
+    this.onIconTap,
+    required this.iconChild,
+  }) : super(key: key);
+
+  final String title;
+  final String hintText;
+  final bool isObscure;
+  final TextEditingController controller;
+  final TextInputType? keyBoardType;
+  final VoidCallback? onIconTap;
+  final Widget iconChild;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: AppTextStyle.descriptionTextStyle,
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Container(
+          height: 55,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: AppColors.whiteColor,
+            borderRadius: BorderRadius.circular(7),
+            border: Border.all(
+              color: AppColors.primaryColor.withOpacity(0.1),
+              width: 2,
+            ),
+          ),
+          child: Center(
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: controller,
+                    style: AppTextStyle.simpleTextStyle.copyWith(
+                      fontSize: 16,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    keyboardType: keyBoardType,
+                    obscureText: isObscure,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      contentPadding: const EdgeInsets.only(
+                        left: 15,
+                        right: 15,
+                      ),
+                      hintText: hintText,
+                      hintStyle: AppTextStyle.simpleTextStyle.copyWith(
+                        fontSize: 16,
+                        color: AppColors.blackColor,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                InkWell(
+                  onTap: onIconTap,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 15,
+                    ),
+                    child: iconChild,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
