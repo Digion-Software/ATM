@@ -6,6 +6,7 @@ import 'package:atm/models/withdrawal/get_withdrawal_list_model.dart';
 import 'package:atm/repository/app_update_repository.dart';
 import 'package:atm/repository/home_repository.dart';
 import 'package:atm/screens/deposit_tab/deposit_screen.dart';
+import 'package:atm/screens/plan_detail/plan_detail_screen.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
@@ -40,34 +41,35 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 150,
-              width: double.infinity,
               decoration: BoxDecoration(
                 color: AppColors.whiteColor,
                 borderRadius: BorderRadius.circular(10),
-                image: const DecorationImage(image: AssetImage(AppImages.depositImage), fit: BoxFit.cover),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primaryColor.withOpacity(0.1),
+                    color: AppColors.primaryColor.withOpacity(0.2),
                     offset: const Offset(0, 3),
                     blurRadius: 10,
-                    spreadRadius: 1,
+                    spreadRadius: 2,
                   ),
                 ],
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 25),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    DescriptionTextView(data: "NO TRANSACTION CHARGES WHEN YOU SAVE THROUGH", fontSize: 10),
-                    DescriptionTextView(data: "ATM", textColor: AppColors.primaryColor, fontWeight: FontWeight.w600),
-                  ],
-                ),
+              height: 125,
+              width: MediaQuery.of(context).size.width - 30,
+              child: ListView(
+                padding: EdgeInsets.zero,
+                physics: const PageScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                children: [
+                  ...List.generate(
+                    3,
+                    (index) => Image.asset(AppImages.depositImage,
+                        fit: BoxFit.cover, height: 150, width: MediaQuery.of(context).size.width - 30),
+                  )
+                ],
               ),
             ),
-            const SizedBox(height: 15),
-            const DescriptionTextView(data: "Investment Plans"),
+            const DescriptionTextView(data: "Investment Plans", fontWeight: FontWeight.w600, topPadding: 15),
             ...List.generate(
               4 /*_dashboardModel!.planData!.length*/,
               (index) => Container(
@@ -138,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       profit: _dashboardModel!.planData![index].profit,
                                     ),
                                   );*/
+                              PageNavigator.pushPage(context: context, page: const PlanDetailScreen());
                             },
                             child: Container(
                                 padding: const EdgeInsets.symmetric(

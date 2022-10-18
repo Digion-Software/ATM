@@ -94,8 +94,7 @@ class _DepositScreenState extends State<DepositScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 15),
-            const DescriptionTextView(data: "Investment Plans"),
+            const DescriptionTextView(data: "Investment Plans",fontWeight: FontWeight.w600,topPadding: 15,),
             ...List.generate(
               4 /*_dashboardModel!.planData!.length*/,
                   (index) => Container(
