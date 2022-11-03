@@ -9,7 +9,7 @@ class AppColors {
   static const Color redColor = Colors.red;
   static const Color greenColor = Colors.green;
   static const Color greyColor = Colors.grey;
-  static const Color orangeColor = Colors.orange;
+  static const Color orangeColor = Color(0XFFe66442);
   static const Color amberColor = Colors.amber;
   static const Color purpleColor = Colors.purple;
   static const Color blueColor = Colors.blue;
@@ -18,4 +18,6 @@ class AppColors {
   static const Color transparentColor = Colors.transparent;
   static const Color iconInActiveColor = Color(0xFF57707B);
   static const Color iconActiveColor = Color(0xFF3FC2BD);
+  static const Color textColor = Color(0xFF576274);
+  static const Color textBluGreyColor = Color(0xFF33435a);
 }

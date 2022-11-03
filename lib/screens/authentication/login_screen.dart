@@ -2,7 +2,6 @@ import 'package:atm/config/app_colors.dart';
 import 'package:atm/config/app_images.dart';
 import 'package:atm/repository/auth_repository.dart';
 import 'package:atm/screens/authentication/signup_screen.dart';
-import 'package:atm/screens/authentication/verify_login_screen.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:atm/widgets/authentication/authentication_view.dart';
 import 'package:atm/widgets/common/button_view.dart';
@@ -29,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
-            flex: 1,
+            flex: 3,
             child: Center(
               child: Image.asset(
                 AppImages.appLogo,
@@ -39,18 +38,22 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           Expanded(
-            flex: 2,
+            flex: 4,
             child: AuthenticationView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const TitleTextView(data: "Sign in"),
-                  const SizedBox(height: 10),
-                  const DescriptionTextView(data: "Sign to your account"),
+                  const TitleTextView(data: "Sign in", fontSize: 28),
+                  SimpleTextView(
+                    data: "Sign to your account",
+                    fontSize: 16,
+                    textColor: AppColors.blackColor.withOpacity(0.5),
+                    topPadding: 10,
+                  ),
                   const SizedBox(height: 30),
                   CommonTextField(
-                    title: "Phone Number",
-                    hintText: "9999999999",
+                    title: "Email",
+                    hintText: "Enter email",
                     controller: phoneNumberController,
                     iconChild: const SizedBox(),
                     isObscure: false,
@@ -63,31 +66,36 @@ class _LoginScreenState extends State<LoginScreen> {
                   //   iconChild: const SizedBox(),
                   //   isObscure: false,
                   // ),
-                  const SizedBox(height: 120),
+                  SizedBox(height: MediaQuery.of(context).size.width / 5),
                   ButtonView(
                     title: "GET VERIFICATION CODE",
                     textColor: AppColors.whiteColor,
                     onTap: () async {
-                      // await AuthRepository.validateAndGetLoginOTP(
-                      //     context: context, userPhoneNumber: phoneNumberController.text);
-                      PageNavigator.pushPage(
-                          context: context, page: const VerifyLoginScreen(isForLogin: true, phoneNumber: "9999999999"));
+                      await AuthRepository.validateAndGetLoginOTP(
+                          context: context, userPhoneNumber: phoneNumberController.text);
+                      // PageNavigator.pushPage(
+                      //     context: context, page: const VerifyLoginScreen(isForLogin: true, phoneNumber: "9999999999"));
                     },
                   ),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const DescriptionTextView(data: "Don't have an account?"),
+                      SimpleTextView(
+                        data: "Don't have an account?",
+                        textColor: AppColors.blackColor.withOpacity(0.5),
+                        fontSize: 16,
+                      ),
                       const SizedBox(width: 5),
                       InkWell(
                         onTap: () async {
                           PageNavigator.pushPage(context: context, page: const SignUpScreen());
                         },
-                        child: const DescriptionTextView(
+                        child: const SimpleTextView(
                           data: "Sign Up",
                           textColor: AppColors.primaryColor,
                           fontWeight: FontWeight.w600,
+                            fontSize: 16
                         ),
                       ),
                     ],

@@ -4,6 +4,7 @@ import 'package:atm/models/common/api_response.dart';
 import 'package:atm/models/simple_model.dart';
 import 'package:atm/models/withdrawal/get_withdrawal_list_model.dart';
 import 'package:atm/screens/dashboard/dashboard_screen.dart';
+import 'package:atm/screens/withdraw/withdraw_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
@@ -33,25 +34,39 @@ class WithdrawalRepository {
     required int bankId,
     required double withdrawalAmount,
     required int accountNumber,
+    required String paymentType,
+    required String userUPIId,
   }) async {
     showLoadingDialog(context: context);
     APIResponse apiResponse =
-        await HttpHandler.postMethod(context: context, url: APIEndpoints.getWithdrawalList, data: {
-      "is_app": AppConstant.isApp,
-      "user_id": await LocalStorage.getString(key: AppConstant.userId),
-      "auth_key": await LocalStorage.getString(key: AppConstant.token),
-      "action": APIActions.capitalWithdrawal,
-      "plan_id": planId,
-      "user_bank_id": bankId,
-      "withdrawal_amount": withdrawalAmount,
-      "withdrawal_account_number": accountNumber,
-      "payment_method": "bank",
-    });
+        await HttpHandler.postMethod(context: context, url: APIEndpoints.getWithdrawalList, data: paymentType == "bank"
+            ? {
+          "is_app": AppConstant.isApp,
+          "user_id": await LocalStorage.getString(key: AppConstant.userId),
+          "auth_key": await LocalStorage.getString(key: AppConstant.token),
+          "action": APIActions.capitalWithdrawal,
+          "plan_id": planId,
+          "user_bank_id": bankId,
+          "withdrawal_amount": withdrawalAmount,
+          "withdrawal_account_number": accountNumber,
+          "payment_method": paymentType,
+        }
+            : {
+          "is_app": AppConstant.isApp,
+          "user_id": await LocalStorage.getString(key: AppConstant.userId),
+          "auth_key": await LocalStorage.getString(key: AppConstant.token),
+          "action": APIActions.capitalWithdrawal,
+          "plan_id": planId,
+          "withdrawal_amount": withdrawalAmount,
+          "payment_method": paymentType,
+          "user_upi_id": userUPIId,
+        });
     if (apiResponse.isSuccess) {
       SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
       hideLoadingDialog(context: context);
       showToast(msg: simpleModel.message, context: context);
       PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+      PageNavigator.pushPage(context: context, page: const WithdrawScreen());
     } else {
       SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
       hideLoadingDialog(context: context);
@@ -65,25 +80,41 @@ class WithdrawalRepository {
     required int bankId,
     required double withdrawalAmount,
     required int accountNumber,
+    required String paymentType,
+    required String userUPIId,
   }) async {
     showLoadingDialog(context: context);
-    APIResponse apiResponse =
-        await HttpHandler.postMethod(context: context, url: APIEndpoints.getWithdrawalList, data: {
-      "is_app": AppConstant.isApp,
-      "user_id": await LocalStorage.getString(key: AppConstant.userId),
-      "auth_key": await LocalStorage.getString(key: AppConstant.token),
-      "action": APIActions.profitWithdrawal,
-      "plan_id": planId,
-      "user_bank_id": bankId,
-      "withdrawal_amount": withdrawalAmount,
-      "withdrawal_account_number": accountNumber,
-      "payment_method": "bank",
-    });
+    APIResponse apiResponse = await HttpHandler.postMethod(
+        context: context,
+        url: APIEndpoints.getWithdrawalList,
+        data: paymentType == "bank"
+            ? {
+                "is_app": AppConstant.isApp,
+                "user_id": await LocalStorage.getString(key: AppConstant.userId),
+                "auth_key": await LocalStorage.getString(key: AppConstant.token),
+                "action": APIActions.profitWithdrawal,
+                "plan_id": planId,
+                "user_bank_id": bankId,
+                "withdrawal_amount": withdrawalAmount,
+                "withdrawal_account_number": accountNumber,
+                "payment_method": paymentType,
+              }
+            : {
+                "is_app": AppConstant.isApp,
+                "user_id": await LocalStorage.getString(key: AppConstant.userId),
+                "auth_key": await LocalStorage.getString(key: AppConstant.token),
+                "action": APIActions.profitWithdrawal,
+                "plan_id": planId,
+                "withdrawal_amount": withdrawalAmount,
+                "payment_method": paymentType,
+                "user_upi_id": userUPIId,
+              });
     if (apiResponse.isSuccess) {
       SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
       hideLoadingDialog(context: context);
       showToast(msg: simpleModel.message, context: context);
       PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+      PageNavigator.pushPage(context: context, page: const WithdrawScreen());
     } else {
       SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
       hideLoadingDialog(context: context);

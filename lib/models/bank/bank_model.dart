@@ -45,6 +45,7 @@ class BankModel {
 
 class BankDatum {
   BankDatum({
+    required this.id,
     required this.userBankId,
     required this.userId,
     required this.managerId,
@@ -60,6 +61,7 @@ class BankDatum {
     required this.bankLogo,
   });
 
+  final String? id;
   final String? userBankId;
   final String? userId;
   final String? managerId;
@@ -75,6 +77,7 @@ class BankDatum {
   final String? bankLogo;
 
   BankDatum copyWith({
+    String? id,
     String? userBankId,
     String? userId,
     String? managerId,
@@ -90,6 +93,7 @@ class BankDatum {
     String? bankLogo,
   }) =>
       BankDatum(
+        id: id ?? this.id,
         userBankId: userBankId ?? this.userBankId,
         userId: userId ?? this.userId,
         managerId: managerId ?? this.managerId,
@@ -106,6 +110,7 @@ class BankDatum {
       );
 
   factory BankDatum.fromJson(Map<String, dynamic> json) => BankDatum(
+    id: json["id"],
         userBankId: json["user_bank_id"],
         userId: json["user_id"],
         managerId: json["manager_id"],
@@ -122,6 +127,7 @@ class BankDatum {
       );
 
   Map<String, dynamic> toJson() => {
+    "id": id,
         "user_bank_id": userBankId,
         "user_id": userId,
         "manager_id": managerId,

@@ -7,6 +7,7 @@ import 'package:atm/models/investment_manage/investment_manage_model.dart';
 import 'package:atm/repository/payment_repository.dart';
 import 'package:atm/screens/dashboard/dashboard_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
+import 'package:atm/utils/common/show_logs.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
@@ -50,6 +51,7 @@ class InvestRepository {
     required BuildContext context,
     required String amount,
     required String planId,
+    required String razorPayKey,
   }) async {
     showLoadingDialog(context: context);
     APIResponse apiResponse = await HttpHandler.postMethod(context: context, url: APIEndpoints.investmentManage, data: {
@@ -64,6 +66,7 @@ class InvestRepository {
     if (apiResponse.isSuccess) {
       hideLoadingDialog(context: context);
       InvestmentManageModel investmentManageModel = investmentManageModelFromJson(apiResponse.data);
+      RazorpayPayment.paymentRequestOptions['key'] = razorPayKey;
       RazorpayPayment.paymentRequestOptions['amount'] = (int.parse(amount) * 100).toString();
       RazorpayPayment.addRazorpayListeners(
         onSuccessHandel: (PaymentSuccessResponse response) async {

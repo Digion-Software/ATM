@@ -71,11 +71,11 @@ class BankRepository {
       showToast(context: context, msg: "Enter account holder name.", isError: true);
     } else if (bankAccountNumber.isEmpty) {
       showToast(context: context, msg: "Enter account number.", isError: true);
-    } else if (bankAccountNumber.length != 12) {
+    } else if (bankAccountNumber.length < 12 || bankAccountNumber.length > 16) {
       showToast(context: context, msg: "Enter valid account number.", isError: true);
     } else if (confirmBankNumber.isEmpty) {
       showToast(context: context, msg: "Enter confirm account number.", isError: true);
-    } else if (confirmBankNumber.length != 12) {
+    } else if (confirmBankNumber.length < 12 || confirmBankNumber.length > 16) {
       showToast(context: context, msg: "Enter valid confirm account number.", isError: true);
     } else if (confirmBankNumber.toString().trim() != bankAccountNumber.toString().trim()) {
       showToast(context: context, msg: "Account number and Confirm account number should be same.", isError: true);
@@ -125,11 +125,11 @@ class BankRepository {
       showToast(context: context, msg: "Enter account holder name.", isError: true);
     } else if (bankAccountNumber.isEmpty) {
       showToast(context: context, msg: "Enter account number.", isError: true);
-    } else if (bankAccountNumber.length != 12) {
+    } else if (bankAccountNumber.length < 12 || bankAccountNumber.length > 16) {
       showToast(context: context, msg: "Enter valid account number.", isError: true);
     } else if (confirmBankNumber.isEmpty) {
       showToast(context: context, msg: "Enter confirm account number.", isError: true);
-    } else if (confirmBankNumber.length != 12) {
+    } else if (confirmBankNumber.length < 12 || confirmBankNumber.length > 16) {
       showToast(context: context, msg: "Enter valid confirm account number.", isError: true);
     } else if (confirmBankNumber.toString().trim() != bankAccountNumber.toString().trim()) {
       showToast(context: context, msg: "Account number and Confirm account number should be same.", isError: true);

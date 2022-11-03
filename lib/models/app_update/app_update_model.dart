@@ -42,6 +42,7 @@ class Data {
     required this.androidVersion,
     required this.iosUrl,
     required this.iosVersion,
+    required this.paymentMethod
   });
 
   final bool androidForceUpdate;
@@ -50,6 +51,7 @@ class Data {
   final String androidVersion;
   final String iosUrl;
   final String iosVersion;
+  final String paymentMethod;
 
   Data copyWith({
     bool? androidForceUpdate,
@@ -58,6 +60,7 @@ class Data {
     String? androidVersion,
     String? iosUrl,
     String? iosVersion,
+    String? paymentMethod,
   }) =>
       Data(
         androidForceUpdate: androidForceUpdate ?? this.androidForceUpdate,
@@ -66,6 +69,7 @@ class Data {
         androidVersion: androidVersion ?? this.androidVersion,
         iosUrl: iosUrl ?? this.iosUrl,
         iosVersion: iosVersion ?? this.iosVersion,
+        paymentMethod: paymentMethod ?? this.paymentMethod
       );
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -75,6 +79,7 @@ class Data {
     androidVersion: json["android_version"],
     iosUrl: json["ios_url"],
     iosVersion: json["ios_version"],
+    paymentMethod: json["paymentMethod"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -84,5 +89,6 @@ class Data {
     "android_version": androidVersion,
     "ios_url": iosUrl,
     "ios_version": iosVersion,
+    "paymentMethod":paymentMethod
   };
 }

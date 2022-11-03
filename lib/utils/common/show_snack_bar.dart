@@ -19,7 +19,7 @@ void showToast({required BuildContext context, required String msg, bool isError
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
-            color: isError ? AppColors.redColor.withOpacity(0.1) : AppColors.greenColor.withOpacity(0.1),
+            color: isError ? AppColors.redColor /*.withOpacity(0.1)*/ : AppColors.greenColor /*.withOpacity(0.1)*/,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
@@ -27,20 +27,18 @@ void showToast({required BuildContext context, required String msg, bool isError
             children: [
               Container(
                   margin: const EdgeInsets.only(top: 5),
-                  child: Icon(
-                    Icons.circle_rounded,
-                    size: 12,
-                    color: isError ? AppColors.redColor : AppColors.greenColor,
-                  )),
+                  child: const Icon(Icons.circle_rounded,
+                      size: 12, color: AppColors.whiteColor /*isError ? AppColors.redColor : AppColors.greenColor,*/
+                      )),
               const SizedBox(
                 width: 5,
               ),
               Expanded(
                 child: SimpleTextView(
                   data: msg,
-                  textColor: isError ? AppColors.redColor : AppColors.greenColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+                  textColor: AppColors.whiteColor /*isError ? AppColors.redColor : AppColors.greenColor*/,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ],

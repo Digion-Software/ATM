@@ -29,7 +29,7 @@ class CommonScaffold extends StatelessWidget {
                       const SizedBox(height: 10),
                       const BackArrowButtonView(color: AppColors.whiteColor),
                       TitleTextView(data: title, textColor: AppColors.whiteColor,
-                      fontSize: 28,topPadding: 15,bottomPadding: 15),
+                      fontSize: 24,topPadding: 15,bottomPadding: 15),
                     ],
                   ),
                 ),

@@ -43,10 +43,7 @@ class KYCRepository {
     if (response.isSuccess) {
       SimpleModel simpleModel = simpleModelFromJson(response.data);
       hideLoadingDialog(context: context);
-      PageNavigator.pushPage(
-        context: context,
-        page: const KYCStatusScreen(),
-      );
+      PageNavigator.pop(context: context);
       showToast(msg: simpleModel.message, context: context);
     } else {
       SimpleModel simpleModel = simpleModelFromJson(response.data);

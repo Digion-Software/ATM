@@ -1,10 +1,21 @@
 import 'package:atm/config/app_colors.dart';
+import 'package:atm/models/withdrawal/get_withdrawal_list_model.dart';
+import 'package:atm/screens/plan_detail/plan_detail_screen.dart';
+import 'package:atm/screens/withdraw/withdrawal_screen.dart';
+import 'package:atm/utils/common/type_strings.dart';
+import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
 import 'package:flutter/material.dart';
 
 class WithdrawalBoxView extends StatelessWidget {
-  const WithdrawalBoxView({Key? key}) : super(key: key);
+  const WithdrawalBoxView({Key? key,
+  required this.data,
+  required this.onDepositPressed,
+  required this.onWithdrawalPressed}) : super(key: key);
 
+  final WithdrawalDatum data;
+  final Function() onDepositPressed;
+  final Function() onWithdrawalPressed;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,54 +37,60 @@ class WithdrawalBoxView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SimpleTextView(data: "Moderate", fontSize: 22, fontWeight: FontWeight.w400),
+            SimpleTextView(data: data.planName??"--", fontSize: 22, fontWeight: FontWeight.w400),
             const SizedBox(height: 10),
             Row(
-              children: const [
-                SimpleTextView(data: "\$500.00", fontSize: 18),
-                SizedBox(width: 20),
-                SimpleTextView(data: "Invested"),
+              children: [
+                SimpleTextView(data: getINRTypeValue(rupees: double.parse((data.invested ?? 0).toString())), fontSize: 18),
+                const SizedBox(width: 10),
+                const SimpleTextView(data: "Invested"),
               ],
             ),
             const SizedBox(height: 10),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Icon(Icons.lock, size: 20),
-                SizedBox(width: 5),
-                SimpleTextView(data: "Profit Amount: 56.00"),
+              children: [
+                const Icon(Icons.lock, size: 20),
+                const SizedBox(width: 5),
+                SimpleTextView(data: "Profit Amount: ${getINRTypeValue(rupees: double.parse((data.profit ?? 0).toString()))}"),
               ],
             ),
             const SizedBox(height: 30),
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(5)),
-                    child: const Center(
-                      child: SimpleTextView(
-                        data: "Deposit",
-                        textColor: AppColors.whiteColor,
-                        fontWeight: FontWeight.w400,
+                  child: InkWell(
+                    onTap: onDepositPressed,
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(5)),
+                      child: const Center(
+                        child: SimpleTextView(
+                          data: "Deposit",
+                          textColor: AppColors.whiteColor,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: AppColors.whiteColor,
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: AppColors.primaryColor, width: 0.5),
-                    ),
-                    child: const Center(
-                      child: SimpleTextView(
-                        data: "Withdrawal",
-                        textColor: AppColors.primaryColor,
-                        fontWeight: FontWeight.w400,
+                  child: InkWell(
+                    onTap: onWithdrawalPressed,
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.whiteColor,
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: AppColors.primaryColor, width: 0.5),
+                      ),
+                      child: const Center(
+                        child: SimpleTextView(
+                          data: "Withdrawal",
+                          textColor: AppColors.primaryColor,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),

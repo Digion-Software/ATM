@@ -1,5 +1,6 @@
 import 'package:atm/config/app_colors.dart';
 import 'package:atm/config/app_images.dart';
+import 'package:atm/repository/referral_repository.dart';
 import 'package:atm/widgets/common/button_view.dart';
 import 'package:atm/widgets/common/common_scaffold.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
@@ -24,23 +25,29 @@ class _ReferNEarnScreenState extends State<ReferNEarnScreen> {
             const SizedBox(height: 15),
             Image.asset(AppImages.referNEarnImage),
             const SizedBox(height: 60),
-            const SimpleTextView(data: "Refer & Earn", fontSize: 28, fontWeight: FontWeight.w400),
+            const SimpleTextView(data: "Refer & Earn", fontSize: 24, fontWeight: FontWeight.w400),
             const SizedBox(height: 8),
             DescriptionTextView(
-                data: "*upto \$1000 every month", fontWeight: FontWeight.w400, textColor: AppColors.blackColor.withOpacity(0.5),),
+                data: "*upto \$1000 every month",
+              fontSize: 16,
+              fontWeight: FontWeight.w400, textColor: AppColors.blackColor.withOpacity(0.5),),
             const SizedBox(height: 20),
              DescriptionTextView(
               data:
                   "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
               fontWeight: FontWeight.w400,
               textColor: AppColors.blackColor.withOpacity(0.5),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.center,fontSize: 16,
+
             ),
             const SizedBox(height: 20),
             ButtonView(
               title: "INVITE AND EARN",
               textColor: AppColors.whiteColor,
-              onTap: () {},
+              onTap: () async {
+                await ReferralRepository.getReferralCode(
+                    context: context);
+              },
             ),
             const SizedBox(height: 20),
           ],

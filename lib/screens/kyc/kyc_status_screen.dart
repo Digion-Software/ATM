@@ -8,7 +8,8 @@ import 'package:atm/widgets/common/text_widgets.dart';
 import 'package:flutter/material.dart';
 
 class KYCStatusScreen extends StatefulWidget {
-  const KYCStatusScreen({Key? key}) : super(key: key);
+  const KYCStatusScreen({Key? key, required this.type}) : super(key: key);
+  final String type;
 
   @override
   State<KYCStatusScreen> createState() => _KYCStatusScreenState();
@@ -18,7 +19,7 @@ class _KYCStatusScreenState extends State<KYCStatusScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
-      title: "You're Verified",
+      title: "You're KYC ${widget.type}",
       child: Column(
         children: [
           Padding(
@@ -26,18 +27,20 @@ class _KYCStatusScreenState extends State<KYCStatusScreen> {
             child: Image.asset(AppImages.kycStatusImage),
           ),
           const SizedBox(height: 40),
-          const SimpleTextView(data: "You're Verified", fontSize: 28, fontWeight: FontWeight.w500),
+          SimpleTextView(data: "You're KYC ${widget.type}", fontSize: 28, fontWeight: FontWeight.w500),
           const SizedBox(height: 20),
-          const SimpleTextView(
-              data: "You have been successfully verified and you can invest ATM",
+          SimpleTextView(
+              data: widget.type == "Pending"
+                  ? "You're KYC is pending, After successfully verify you will can invest ATM."
+                  : "You have been successfully verified and you can invest ATM.",
               fontSize: 18,
               textAlign: TextAlign.center),
-          SizedBox(height: MediaQuery.of(context).size.width/2),
+          SizedBox(height: MediaQuery.of(context).size.width / 2),
           ButtonView(
             title: "CONTINUE",
             textColor: AppColors.whiteColor,
             onTap: () {
-              PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+              PageNavigator.pop(context: context);
             },
           ),
           const SizedBox(height: 30),

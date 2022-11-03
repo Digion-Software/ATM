@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:atm/models/bank/bank_model.dart';
+
 GetBankNameLogoModel getBankNameLogoModelFromJson(String str) => GetBankNameLogoModel.fromJson(json.decode(str));
 
 String getBankNameLogoModelToJson(GetBankNameLogoModel data) => json.encode(data.toJson());
@@ -34,40 +36,5 @@ class GetBankNameLogoModel {
   Map<String, dynamic> toJson() => {
     "status": status,
     "bank_data": bankData == null ? null : List<dynamic>.from(bankData!.map((x) => x.toJson())),
-  };
-}
-
-class BankDatum {
-  BankDatum({
-    required this.id,
-    required this.bankName,
-    required this.bankLogo,
-  });
-
-  final String? id;
-  final String? bankName;
-  final String? bankLogo;
-
-  BankDatum copyWith({
-    String? id,
-    String? bankName,
-    String? bankLogo,
-  }) =>
-      BankDatum(
-        id: id ?? this.id,
-        bankName: bankName ?? this.bankName,
-        bankLogo: bankLogo ?? this.bankLogo,
-      );
-
-  factory BankDatum.fromJson(Map<String, dynamic> json) => BankDatum(
-    id: json["id"],
-    bankName: json["bank_name"],
-    bankLogo: json["bank_logo"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "bank_name": bankName,
-    "bank_logo": bankLogo,
   };
 }

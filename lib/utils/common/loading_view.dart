@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingView extends StatelessWidget {
-  const LoadingView({Key? key, this.size = 40}) : super(key: key);
+  const LoadingView({Key? key, this.size = 60}) : super(key: key);
 
   final double size;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: SpinKitWanderingCubes(
-      color: AppColors.cyanColor,
+        child: SpinKitFadingCircle(
+      color: AppColors.primaryColor,
       size: size,
     ));
   }

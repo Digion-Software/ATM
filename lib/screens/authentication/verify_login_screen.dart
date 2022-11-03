@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:atm/config/app_colors.dart';
 import 'package:atm/config/app_text_style.dart';
-import 'package:atm/screens/dashboard/dashboard_screen.dart';
-import 'package:atm/utils/navigation/page_navigator.dart';
+import 'package:atm/repository/auth_repository.dart';
+import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/widgets/common/button_view.dart';
 import 'package:atm/widgets/common/common_scaffold.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
@@ -56,12 +56,13 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const DescriptionTextView(
-              data: "Enter Code that we have sent to your email\n${"test98@gmail.com"}",
+          DescriptionTextView(
+              data:
+                  "Enter Code that we have sent to your email\n${widget.isForLogin ? widget.phoneNumber : widget.email}",
               fontSize: 14,
               textColor: AppColors.whiteColor),
           SizedBox(
-            height: MediaQuery.of(context).size.width / 6.5,
+            height: MediaQuery.of(context).size.width / 4,
           ),
           PinCodeTextField(
             appContext: context,
@@ -103,7 +104,7 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
               return true;
             },
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           Center(
@@ -121,25 +122,25 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
             title: "VERIFY",
             textColor: AppColors.whiteColor,
             onTap: () async {
-              // if (otpController.text.isEmpty) {
-              //   showToast(context: context, msg: "Enter OTP!");
-              // } else if (otpController.text.length != 6) {
-              //   showToast(context: context, msg: "Enter valid OTP!");
-              // } else {
-              //   if (widget.isForLogin) {
-              //     await AuthRepository.login(
-              //         context: context, userPhoneNumber: widget.phoneNumber, otp: otpController.text);
-              //   } else {
-              //     await AuthRepository.newRegisterUser(
-              //         context: context,
-              //         userFirstName: widget.firstName!,
-              //         userLastName: widget.lastName!,
-              //         userEmailAddress: widget.email!,
-              //         userPhone: widget.phoneNumber,
-              //         otp: otpController.text);
-              //   }
-              // }
-              PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+              if (otpController.text.isEmpty) {
+                showToast(context: context, msg: "Enter OTP!");
+              } else if (otpController.text.length != 6) {
+                showToast(context: context, msg: "Enter valid OTP!");
+              } else {
+                if (widget.isForLogin) {
+                  await AuthRepository.login(
+                      context: context, userPhoneNumber: widget.phoneNumber, otp: otpController.text);
+                } else {
+                  await AuthRepository.newRegisterUser(
+                      context: context,
+                      userFirstName: widget.firstName!,
+                      userLastName: widget.lastName!,
+                      userEmailAddress: widget.email!,
+                      userPhone: widget.phoneNumber,
+                      otp: otpController.text);
+                }
+              }
+              // PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
             },
           ),
         ],

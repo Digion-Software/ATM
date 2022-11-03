@@ -43,13 +43,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const TitleTextView(data: "Sign up"),
-                  const SizedBox(height: 10),
-                  const DescriptionTextView(data: "Create an account to continue!"),
+                  const TitleTextView(data: "Sign up", fontSize: 28),
+                  SimpleTextView(
+                      data: "Create an account to continue!",
+                      textColor: AppColors.blackColor.withOpacity(0.5),
+                      topPadding: 10,
+                      fontSize: 16),
                   const SizedBox(height: 30),
                   CommonTextField(
                     title: "First Name",
-                    hintText: "Vikas",
+                    hintText: "Enter First Name",
                     controller: firstNameController,
                     iconChild: const SizedBox(),
                     isObscure: false,
@@ -57,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 20),
                   CommonTextField(
                     title: "Last Name",
-                    hintText: "Patel",
+                    hintText: "Enter Last Name",
                     controller: lastNameController,
                     iconChild: const SizedBox(),
                     isObscure: false,
@@ -65,7 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 20),
                   CommonTextField(
                     title: "Email",
-                    hintText: "vikaspatel@gmail.com",
+                    hintText: "Enter Email",
                     controller: emailController,
                     iconChild: const SizedBox(),
                     isObscure: false,
@@ -73,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 20),
                   CommonTextField(
                     title: "Phone",
-                    hintText: "9999999999",
+                    hintText: "Enter Phone Number",
                     controller: phoneController,
                     iconChild: const SizedBox(),
                     isObscure: false,
@@ -82,30 +85,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ButtonView(
                     title: "SIGN UP",
                     textColor: AppColors.whiteColor,
-                    onTap: () async{
+                    onTap: () async {
                       await AuthRepository.validateAndGetOTPForNewRegister(
                           context: context,
                           userFirstName: firstNameController.text,
                           userLastName: lastNameController.text,
                           userEmailAddress: emailController.text,
                           userPhone: phoneController.text);
+                      // PageNavigator.pushPage(
+                      //     context: context, page: const VerifyLoginScreen(phoneNumber: "test98@gmail.com", isForLogin: false));
                     },
                   ),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const DescriptionTextView(data: "You Already have an account?"),
+                      SimpleTextView(
+                          data: "You Already have an account?",
+                          textColor: AppColors.blackColor.withOpacity(0.5),
+                          fontSize: 16),
                       const SizedBox(width: 5),
                       InkWell(
                         onTap: () {
-                         PageNavigator.pop(context: context);
+                          PageNavigator.pop(context: context);
                         },
-                        child: const DescriptionTextView(
-                          data: "Sign In",
-                          textColor: AppColors.primaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        child: const SimpleTextView(
+                            data: "Sign In",
+                            textColor: AppColors.primaryColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16),
                       ),
                     ],
                   ),

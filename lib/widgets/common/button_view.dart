@@ -15,10 +15,11 @@ class ButtonView extends StatelessWidget {
       this.topPadding = 15,
       this.bottomPadding = 15,
       this.bottomMargin = 0,
-      this.leftMargin = 10,
-      this.rightMargin = 10,
+      this.leftMargin = 0,
+      this.rightMargin = 0,
       this.topMargin = 0,
       this.textColor,
+        this.buttonTextSize = 15,
       this.buttonColor = AppColors.primaryColor})
       : super(key: key);
 
@@ -35,6 +36,7 @@ class ButtonView extends StatelessWidget {
   final double rightMargin;
   final Color? textColor;
   final Color? buttonColor;
+  final double? buttonTextSize;
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +49,13 @@ class ButtonView extends StatelessWidget {
         decoration: BoxDecoration(
           color: buttonColor,
           borderRadius: BorderRadius.all(
-            Radius.circular(isRoundedBorder ? 50 : 5),
+            Radius.circular(isRoundedBorder ? 50 : 10),
           ),
         ),
         child: Center(
           child: Text(
             title.toUpperCase(),
-            style: AppTextStyle.buttonTextStyle.copyWith(color: textColor),
+            style: AppTextStyle.buttonTextStyle.copyWith(color: textColor,fontSize: buttonTextSize,fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -82,6 +84,7 @@ class BackArrowButtonView extends StatelessWidget {
         child: Icon(
           icon,
           color: color,
+          size: 20,
         ),
       ),
     );

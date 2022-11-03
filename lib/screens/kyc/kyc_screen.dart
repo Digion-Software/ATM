@@ -1,19 +1,32 @@
+import 'dart:io';
+
 import 'package:atm/config/app_colors.dart';
+import 'package:atm/repository/kyc_repository.dart';
 import 'package:atm/screens/kyc/kyc_status_screen.dart';
+import 'package:atm/utils/common/show_logs.dart';
+import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:atm/widgets/common/button_view.dart';
 import 'package:atm/widgets/common/common_scaffold.dart';
+import 'package:atm/widgets/common/text_field_view.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class KYCScreen extends StatefulWidget {
-  const KYCScreen({Key? key}) : super(key: key);
+  const KYCScreen({Key? key,required this.isEditable}) : super(key: key);
 
+  final bool isEditable;
   @override
   State<KYCScreen> createState() => _KYCScreenState();
 }
 
 class _KYCScreenState extends State<KYCScreen> {
+  int _value = 1;
+  File? fontPicture;
+  File? backPicture;
+  final TextEditingController documentNumberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
@@ -42,25 +55,48 @@ class _KYCScreenState extends State<KYCScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SimpleTextView(data: "Choose Document Type", fontSize: 16, fontWeight: FontWeight.w500),
-                    const SizedBox(height: 20),
+                    const SimpleTextView(
+                        data: "Choose Document Type", fontSize: 16, fontWeight: FontWeight.w500, bottomPadding: 10),
                     Row(
                       children: [
                         Expanded(
                           child: Row(
-                            children: const [
-                              Icon(Icons.radio_button_checked, color: AppColors.primaryColor),
-                              SizedBox(width: 10),
-                              SimpleTextView(data: "Aadhar Card"),
+                            children: [
+                              Radio(
+                                  activeColor: AppColors.primaryColor,
+                                  value: 1,
+                                  groupValue: _value,
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  onChanged: (value) {
+                                    if(widget.isEditable) {
+                                      setState(() {
+                                        _value = value as int;
+                                      });
+                                    }
+                                  }),
+                              const SimpleTextView(data: "Aadhar Card"),
                             ],
                           ),
                         ),
                         Expanded(
                           child: Row(
-                            children: const [
-                              Icon(Icons.radio_button_off, color: AppColors.primaryColor),
-                              SizedBox(width: 10),
-                              SimpleTextView(data: "Pan Card"),
+                            children: [
+                              Radio(
+                                activeColor: AppColors.primaryColor,
+                                value: 2,
+                                groupValue: _value,
+                                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                onChanged: (value) {
+                                  if(widget.isEditable) {
+                                    setState(
+                                          () {
+                                        _value = value as int;
+                                      },
+                                    );
+                                  }
+                                },
+                              ),
+                              const SimpleTextView(data: "Pan Card"),
                             ],
                           ),
                         ),
@@ -68,6 +104,32 @@ class _KYCScreenState extends State<KYCScreen> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            const SizedBox(height: 15),
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppColors.whiteColor,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primaryColor.withOpacity(0.1),
+                    offset: const Offset(0, 3),
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 25),
+                child: CommonTextField(
+                    title: _value == 1 ? "Aadhar Card Number" : "Pan Card Number",
+                    hintText: _value == 1 ? "Enter Aadhar Card Number" : "Enter Pan Card Number",
+                    isObscure: false,
+                    isReadOnly: !widget.isEditable,
+                    controller: documentNumberController,
+                    iconChild: const SizedBox()),
               ),
             ),
             const SizedBox(height: 15),
@@ -98,58 +160,128 @@ class _KYCScreenState extends State<KYCScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: AppColors.whiteColor,
-                              borderRadius: BorderRadius.circular(7),
-                              border: Border.all(
-                                color: AppColors.primaryColor.withOpacity(0.1),
-                                width: 2,
+                          child: Center(
+                            child: InkWell(
+                              onTap: (){
+                                if(widget.isEditable) {
+                                  selectFontImage();
+                                }
+                              },
+                              child: Container(
+                                height: MediaQuery.of(context).size.width / 3,
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                decoration: BoxDecoration(
+                                  color: AppColors.whiteColor,
+                                  borderRadius: BorderRadius.circular(7),
+                                  border: Border.all(
+                                    color: AppColors.primaryColor.withOpacity(0.1),
+                                    width: 2,
+                                  ),
+                                  image: fontPicture != null
+                                      ? DecorationImage(
+                                    image: FileImage(fontPicture!),
+                                  )
+                                      : null,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.camera_alt_outlined, size: 40, color: AppColors.primaryColor),
+                                    SimpleTextView(data: "Front", fontSize: 16),
+                                  ],
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Icon(Icons.camera_alt_outlined, size: 40, color: AppColors.primaryColor),
-                                SimpleTextView(data: "Front"),
-                              ],
                             ),
                           ),
                         ),
                         const SizedBox(width: 15),
-                        Expanded(
-                          child: Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: AppColors.whiteColor,
-                              borderRadius: BorderRadius.circular(7),
-                              border: Border.all(
-                                color: AppColors.primaryColor.withOpacity(0.1),
-                                width: 2,
+                        _value == 2
+                            ? Container()
+                            : Expanded(
+                                child: InkWell(
+                                  onTap: (){
+                                    if(widget.isEditable) {
+                                      selectBackImage();
+                                    }
+                                  },
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width / 3,
+                                    width: MediaQuery.of(context).size.width / 2.5,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.whiteColor,
+                                      borderRadius: BorderRadius.circular(7),
+                                      border: Border.all(
+                                        color: AppColors.primaryColor.withOpacity(0.1),
+                                        width: 2,
+                                      ),
+                                      image: backPicture != null
+                                          ? DecorationImage(
+                                        image: FileImage(backPicture!),
+                                      )
+                                          : null,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(Icons.camera_alt_outlined, size: 40, color: AppColors.primaryColor),
+                                        SimpleTextView(data: "Back", fontSize: 16),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
-                                Icon(Icons.camera_alt_outlined, size: 40, color: AppColors.primaryColor),
-                                SimpleTextView(data: "Back"),
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.width / 2),
             ButtonView(
               title: "SUBMIT",
               textColor: AppColors.whiteColor,
-              onTap: () {
-                PageNavigator.pushPage(context: context, page: const KYCStatusScreen());
+              onTap: () async {
+                if(widget.isEditable) {
+                  if (_value == 0) {
+                    showToast(
+                        context: context,
+                        msg: "Please select document type.",
+                        isError: true);
+                  }
+                  else if (documentNumberController.text.isEmpty) {
+                    showToast(
+                        context: context,
+                        msg: "Please enter valid document number.",
+                        isError: true);
+                  }
+                  else if (_value == 1 && fontPicture == null) {
+                    showToast(
+                        context: context,
+                        msg: "Please select aadhar card font image.",
+                        isError: true);
+                  }
+                  else if (_value == 1 && backPicture == null) {
+                    showToast(
+                        context: context,
+                        msg: "Please select aadhar card back image.",
+                        isError: true);
+                  }
+                  else if (_value == 2 && fontPicture == null) {
+                    showToast(
+                        context: context,
+                        msg: "Please select pan card image.",
+                        isError: true);
+                  }
+                  else {
+                    await KYCRepository.updateKYC(
+                      isPanCard: _value == 2,
+                      context: context,
+                      aadharCardNumber: documentNumberController.text,
+                      aadharCardFontImage: fontPicture,
+                      aadharCardBackImage: backPicture,
+                      panCardImage: fontPicture,
+                    );
+                  }
+                }
               },
             ),
             const SizedBox(height: 30),
@@ -157,5 +289,25 @@ class _KYCScreenState extends State<KYCScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> selectFontImage() async {
+    ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      fontPicture = File(image.path);
+      showLogs(message: "USER PICTURE :: $fontPicture");
+    }
+    setState(() {});
+  }
+
+  Future<void> selectBackImage() async {
+    ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      backPicture = File(image.path);
+      showLogs(message: "USER PICTURE :: $backPicture");
+    }
+    setState(() {});
   }
 }

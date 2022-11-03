@@ -42,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3), () {});
     AppUpdateModel? appUpdateModel = await AppUpdateRepository.checkAppConfigToUpdate(context: context);
     if (appUpdateModel != null) {
+      LocalStorage.setString(key: AppConstant.paymentMethodForDeposit, value: appUpdateModel.data.paymentMethod);
       if (Platform.isAndroid) {
         if (appUpdateModel.data.androidVersion != AppConstant.androidAppVersion) {
           Future.delayed(const Duration(seconds: 0), () {

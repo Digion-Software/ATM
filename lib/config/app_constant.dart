@@ -10,6 +10,7 @@ class AppConstant {
   static const String userId = "USER-ID";
   static const String isLoggedIn = "IS-LOGIN";
   static const String userDetails = "USER-DETAILS";
+  static const String paymentMethodForDeposit = "PAYMENT-METHOD-FOR-DEPOSIT";
 }
 
 class APIActions {

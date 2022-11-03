@@ -3,7 +3,10 @@ import 'package:atm/config/app_images.dart';
 import 'package:atm/screens/deposit_tab/deposit_screen.dart';
 import 'package:atm/screens/drawer/drawer_screen.dart';
 import 'package:atm/screens/home_tab/home_screen.dart';
+import 'package:atm/screens/kyc/kyc_screen.dart';
+import 'package:atm/screens/kyc/kyc_status_screen.dart';
 import 'package:atm/screens/transaction_tab/transaction_screen.dart';
+import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:atm/utils/open_drawer_menu.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
 import 'package:flutter/material.dart';
@@ -18,18 +21,15 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 1;
 
+  String kycStatus = "";
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  static const List<Widget> _widgetOptions = [
-    TransactionScreen(),
-    HomeScreen(),
-    DepositScreen(depositType: null, withdrawalDatum: null, razorPayConfigModel: null),
-  ];
+  final List<Widget> _widgetOptions = [];
 
   static const List<String> _screenNames = [
     "Transaction",
     "ATM",
-    "Deposite",
+    "My Investment",
   ];
 
   void _onItemTapped(int index) {
@@ -39,15 +39,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
+  void initState() {
+    _widgetOptions.addAll([
+      const TransactionScreen(),
+      HomeScreen(isNeedKYC: (t) {
+        kycStatus = t;
+        if (mounted) {
+          setState(() {});
+        }
+      }),
+      DepositScreen(isNeedKYC: (t) {
+        kycStatus = t;
+        if (mounted) {
+          setState(() {});
+        }
+      }),
+    ]);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       key: _scaffoldKey,
       drawer: DrawerScreen(
-        onHomePressed: (){
+        onHomePressed: () {
           _onItemTapped(1);
         },
-        onTransactionPressed: (){
+        onTransactionPressed: () {
           _onItemTapped(0);
         },
       ),
@@ -86,7 +106,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
               ),
-              _selectedIndex != 0
+              _selectedIndex == 1
                   ? Container(
                       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                       decoration: BoxDecoration(
@@ -99,21 +119,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         children: [
                           const SimpleTextView(
                             data: "Deposit Above 500 Require KYC",
-                            fontSize: 12,
                             textColor: AppColors.greyColor,
+                            fontSize: 12,
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.greyColor.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                            child: Row(
-                              children: const [
-                                Text("Verify Now"),
-                                SizedBox(width: 5),
-                                Icon(Icons.info_outline),
-                              ],
+                          const SizedBox(width: 5),
+                          InkWell(
+                            onTap: () {
+                              if (kycStatus == "Rejected" || kycStatus == "") {
+                                PageNavigator.pushPage(
+                                    context: context, page: const KYCScreen(isEditable: true));
+
+                              } else {
+                                PageNavigator.pushPage(context: context, page: KYCStatusScreen(type:kycStatus));
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.greyColor.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                              child: Row(
+                                children: [
+                                  SimpleTextView(
+                                      data: kycStatus == "Approved" ? "Verified" : "Verify Now",
+                                      textColor: kycStatus == "Approved" ? AppColors.greenColor : AppColors.textColor),
+                                  const SizedBox(width: 5),
+                                  Icon(
+                                    kycStatus == "Approved" ? Icons.verified_outlined : Icons.info_outline,
+                                    color: kycStatus == "Approved" ? AppColors.greenColor : AppColors.textColor,
+                                    size: 22,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -156,7 +194,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                           ],
                         ),
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: const Icon(Icons.home, color: AppColors.whiteColor),
                       ),
                     ),

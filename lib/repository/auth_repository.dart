@@ -155,7 +155,7 @@ class AuthRepository {
         hideLoadingDialog(context: context);
         SimpleModel simpleModel = simpleModelFromJson(response.data);
         PageNavigator.pushPage(
-            context: context, page: VerifyLoginScreen(isForLogin: true, phoneNumber: userPhoneNumber));
+            context: context, page: VerifyLoginScreen(isForLogin: true, phoneNumber: userPhoneNumber,));
         showToast(msg: simpleModel.message, context: context);
       } else {
         hideLoadingDialog(context: context);
@@ -186,6 +186,12 @@ class AuthRepository {
       showToast(msg: loginModel.message ?? "--", isError: true, context: context);
     }
   }
+
+  static Future<void> logout(BuildContext context)async{
+    await LocalStorage.clearStorage();
+    PageNavigator.pushAndRemoveUntilPage(context: context, page: const LoginScreen());
+  }
+
 }
 
 bool isValidEmail(String email) {

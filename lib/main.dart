@@ -1,5 +1,4 @@
 import 'package:atm/config/app_colors.dart';
-import 'package:atm/screens/plan_detail/plan_detail_screen.dart';
 import 'package:atm/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +16,9 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: AppColors.transparentColor),
+    );
     return MaterialApp(
       title: 'ATM',
       debugShowCheckedModeBanner: false,

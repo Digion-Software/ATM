@@ -1,12 +1,14 @@
 import 'package:atm/config/app_colors.dart';
 import 'package:atm/config/app_images.dart';
 import 'package:atm/models/transaction/transaction_model.dart';
+import 'package:atm/utils/common/type_strings.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
 import 'package:flutter/material.dart';
 
 class TransactionView extends StatelessWidget {
-  const TransactionView({Key? key,required this.data}) : super(key: key);
+  const TransactionView({Key? key, required this.data}) : super(key: key);
   final TransactionDatum? data;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +30,7 @@ class TransactionView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SimpleTextView(data: "S9EFDA3FE95D", textColor: AppColors.greyColor),
+            SimpleTextView(data: data!.transactionId ?? "--", textColor: AppColors.greyColor),
             const SizedBox(height: 10),
             Row(
               children: [
@@ -47,17 +49,18 @@ class TransactionView extends StatelessWidget {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      SimpleTextView(data: "Interested from Aggressive"),
-                      SizedBox(height: 5),
-                      SimpleTextView(data: "14 Sep 2022", textColor: AppColors.greyColor),
+                    children: [
+                      SimpleTextView(data: data!.remarks ?? "--", fontWeight: FontWeight.w600),
+                      const SizedBox(height: 5),
+                      SimpleTextView(data: data!.addedDatetime ?? "--", textColor: AppColors.greyColor),
                     ],
                   ),
                 ),
-                const SimpleTextView(
-                  data: "+45.3",
-                  fontWeight: FontWeight.w400,
-                  fontSize: 18,
+                SimpleTextView(
+                  data: "${data!.amount!.startsWith("-") ? "" : "+"}${getINRTypeValue(rupees: double.parse(data!.amount ?? "0"), decimalDigits: 2)}",
+                  fontWeight: FontWeight.w600,
+                  textColor: data!.amount!.startsWith("-") ? AppColors.redColor:AppColors.greenColor,
+                  fontSize: 20,
                 ),
               ],
             ),

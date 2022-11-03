@@ -52,6 +52,8 @@ class CommonTextField extends StatelessWidget {
     this.keyBoardType,
     this.onIconTap,
     required this.iconChild,
+    this.isReadOnly = false,
+    this.textAlignment = TextAlign.start,
   }) : super(key: key);
 
   final String title;
@@ -61,6 +63,8 @@ class CommonTextField extends StatelessWidget {
   final TextInputType? keyBoardType;
   final VoidCallback? onIconTap;
   final Widget iconChild;
+  final bool isReadOnly;
+  final TextAlign textAlignment;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +73,7 @@ class CommonTextField extends StatelessWidget {
       children: [
         Text(
           title,
-          style: AppTextStyle.descriptionTextStyle,
+          style: AppTextStyle.descriptionTextStyle.copyWith(color: AppColors.blackColor.withOpacity(0.5), fontSize: 16),
         ),
         const SizedBox(
           height: 5,
@@ -91,6 +95,7 @@ class CommonTextField extends StatelessWidget {
                 Expanded(
                   child: TextFormField(
                     controller: controller,
+                    readOnly: isReadOnly,
                     style: AppTextStyle.simpleTextStyle.copyWith(
                       fontSize: 16,
                       color: AppColors.blackColor,
@@ -98,6 +103,7 @@ class CommonTextField extends StatelessWidget {
                     ),
                     keyboardType: keyBoardType,
                     obscureText: isObscure,
+                    textAlign: textAlignment,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       focusedBorder: InputBorder.none,
