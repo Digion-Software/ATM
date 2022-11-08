@@ -206,13 +206,18 @@ class HttpHandler {
     }
     if (file3Data != null && file3Key != null) {
       request.files.add(await http.MultipartFile.fromPath(file3Key, file3Data.path));
+      final bytes = await file3Data.readAsBytes();
+      String base64Encode = base64.encode(bytes);
     }
+
     showLogs(message: "STREAM URL -- ${request.url}");
     showLogs(message: "STREAM HEADERS -- ${request.headers}");
     showLogs(message: "STREAM FIELDS -- ${request.fields}");
+    showLogs(message: "STREAM FILES -- ${request.files.first.contentType.parameters}");
     http.StreamedResponse response = await request.send();
     showLogs(message: "STREAM RESPONSE -- ${response.statusCode}");
     http.Response responsed = await http.Response.fromStream(response);
+    showLogs(message: "RESPONSED -- ${responsed.body}");
     if ((json.decode(responsed.body)["status"] == null
             ? response.statusCode
             : json.decode(responsed.body)["status"].toString().toLowerCase()) ==

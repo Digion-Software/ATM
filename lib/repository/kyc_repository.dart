@@ -27,11 +27,22 @@ class KYCRepository {
     String token = await LocalStorage.getString(key: AppConstant.token) ?? "";
     APIResponse response = await HttpHandler.postMultiPartRequestMethod(
       url: APIEndpoints.updateKYC,
-      data: {
+      data:
+      isPanCard ?
+      {
+        "pan_number": aadharCardNumber,
+        "user_id": userId,
+        "auth_key": token,
+        "is_app": AppConstant.isApp.toString(),
+        "type" : "pan"
+      }
+          :
+      {
         "aadhar_card_number": aadharCardNumber,
         "user_id": userId,
         "auth_key": token,
         "is_app": AppConstant.isApp.toString(),
+        "type" : "aadhar"
       },
       file1Key: !isPanCard ? "aadhar_card_front_image" : null,
       file1Data: !isPanCard ? aadharCardFontImage : null,

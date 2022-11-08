@@ -105,8 +105,8 @@ class _SettingScreenState extends State<SettingScreen> {
                             profileDataModel: profileDataModel!,
                             isUpdated: (v) async {
                               if (v) {
-                                await getProfileData();
                                 PageNavigator.pop(context: context);
+                                await getProfileData();
                               }
                             },
                           ));
