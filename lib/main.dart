@@ -1,5 +1,4 @@
 import 'package:atm/config/app_colors.dart';
-import 'package:atm/screens/onboarding/onboarding_screen.dart';
 import 'package:atm/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
