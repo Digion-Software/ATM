@@ -10,6 +10,11 @@ class AppImages {
   static const String referNEarnImage = "assets/image/refer-and-earn.png";
   static const String kycStatusImage = "assets/image/kyc-status.png";
 
+  ///INTRO IMAGES
+  static const String introOne = "assets/image/intro-one.png";
+  static const String introTwo = "assets/image/intro-two.png";
+  static const String introThree = "assets/image/intro-three.png";
+  static const String introFour = "assets/image/intro-four.png";
   /// ICONS
   static const String menuIcon = "assets/icon/menu.png";
 }

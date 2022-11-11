@@ -2,7 +2,8 @@ class APIEndpoints {
   APIEndpoints._();
 
   static const String baseUrl = "http://anytimemoney.cash/";
-  static const String hostUrl = "ajaxfiles/";
+  static const String hostUrl1 = "ajaxfiles/";
+  static const String hostUrl2 = "datatable/";
 
   ///APP UPDATE
   static const String appUpdate = "app_config.php";
@@ -43,6 +44,7 @@ class APIEndpoints {
   static const String paymentSuccess = "payment_success.php";
   static const String paymentFailed = "payment_failed.php";
 
-  ///FAQ
+  ///FAQ AND SUPPORT
   static const String faq = "faq_details.php";
+  static const String ticketList = "ticket_list.php";
 }

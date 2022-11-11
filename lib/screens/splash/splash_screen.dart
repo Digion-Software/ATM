@@ -6,6 +6,7 @@ import 'package:atm/models/app_update/app_update_model.dart';
 import 'package:atm/repository/app_update_repository.dart';
 import 'package:atm/screens/authentication/login_screen.dart';
 import 'package:atm/screens/dashboard/dashboard_screen.dart';
+import 'package:atm/screens/onboarding/onboarding_screen.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:flutter/material.dart';
@@ -152,7 +153,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkLoginStatus() async {
     bool? isLogin = await LocalStorage.getBool(key: AppConstant.isLoggedIn);
     if (isLogin == true) {
-      PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+      PageNavigator.pushAndRemoveUntilPage(context: context, page: const OnBoardingScreen());
     } else {
       PageNavigator.pushAndRemoveUntilPage(context: context, page: const LoginScreen());
     }

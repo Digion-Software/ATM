@@ -22,7 +22,7 @@ class HelpAndSupportScreen extends StatefulWidget {
 }
 
 class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
-  List<Step> _steps = [];
+  final List<Step> _steps = [];
   FaqModel? faqModel;
 
   getFAQData() async {
@@ -52,9 +52,8 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 10),
                   const SimpleTextView(data: "Help & Support", textColor: AppColors.whiteColor),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 15),
                   Container(
                     child: _renderSteps(),
                   ),
@@ -76,13 +75,14 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
         return ExpansionPanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              title: SimpleTextView(data: step.title, fontWeight: FontWeight.w500),
+              contentPadding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 5),
+              title: SimpleTextView(data: step.title, fontSize: 16, fontWeight: FontWeight.w500),
             );
           },
           body: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            title: SimpleTextView(data: step.body, textColor: AppColors.blackColor.withOpacity(0.7)),
+            dense: true,
+            contentPadding: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 10),
+            title: SimpleTextView(data: step.body, textColor: AppColors.textColor),
           ),
           isExpanded: step.isExpanded,
         );

@@ -13,7 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class HttpHandler {
-  static String endPointUrl = APIEndpoints.baseUrl + APIEndpoints.hostUrl;
+  static String endPointUrl1 = APIEndpoints.baseUrl + APIEndpoints.hostUrl1;
+  static String endPointUrl2 = APIEndpoints.baseUrl + APIEndpoints.hostUrl2;
 
   static Future<Map<String, String>> _getHeaders() async {
     final String? token = await LocalStorage.getString(key: AppConstant.token);
@@ -49,11 +50,17 @@ class HttpHandler {
     }
   }
 
-  static Future<APIResponse> getMethod({required String url}) async {
+  static Future<APIResponse> getMethod({required String url,bool useSecondUrl = false}) async {
     var header = await _getHeaders();
-    showLogs(message: "GET URL -- '$endPointUrl$url'");
+    if(useSecondUrl) {
+      showLogs(message: "GET URL -- '$endPointUrl2$url'");
+    }
+    else{
+      showLogs(message: "GET URL -- '$endPointUrl1$url'");
+    }
     http.Response response = await http.get(
-      Uri.parse("$endPointUrl$url"),
+      useSecondUrl ? Uri.parse("$endPointUrl2$url"):
+      Uri.parse("$endPointUrl1$url"),
       headers: header,
     );
     showLogs(message: "GET RESPONSE CODE -- '${response.statusCode}'");
@@ -73,12 +80,18 @@ class HttpHandler {
   }
 
   static Future<APIResponse> postMethod(
-      {required BuildContext context, required String url, Map<String, dynamic>? data}) async {
+      {required BuildContext context, required String url, Map<String, dynamic>? data,bool useSecondUrl = false}) async {
     var header = await _getHeaders();
-    showLogs(message: "POST URL -- '$endPointUrl$url'");
+    if(useSecondUrl) {
+      showLogs(message: "POST URL -- '$endPointUrl2$url'");
+    }
+    else{
+      showLogs(message: "POST URL -- '$endPointUrl1$url'");
+    }
     showLogs(message: "POST DATA -- '$data'");
     http.Response response = await http.post(
-      Uri.parse("$endPointUrl$url"),
+      useSecondUrl ? Uri.parse("$endPointUrl2$url"):
+      Uri.parse("$endPointUrl1$url"),
       headers: header,
       body: data == null ? null : jsonEncode(data),
     );
@@ -137,7 +150,7 @@ class HttpHandler {
     }
   }
 
-  static Future<APIResponse> putMethod({required String url, Map<String, dynamic>? data}) async {
+  /*static Future<APIResponse> putMethod({required String url, Map<String, dynamic>? data}) async {
     var header = await _getHeaders();
     showLogs(message: "PUT URL -- '$endPointUrl$url'");
     showLogs(message: "PUT DATA -- '$data'");
@@ -184,7 +197,7 @@ class HttpHandler {
           APIResponse(header: response.headers, isSuccess: false, statusCode: response.statusCode, data: response.body);
       return data;
     }
-  }
+  }*/
 
   static Future<APIResponse> postMultiPartRequestMethod({
     required String url,
@@ -195,8 +208,10 @@ class HttpHandler {
     String? file2Key,
     File? file3Data,
     String? file3Key,
+    bool useSecondUrl = false
   }) async {
-    var request = http.MultipartRequest("POST", Uri.parse("$endPointUrl$url"));
+    var request = http.MultipartRequest("POST", useSecondUrl ? Uri.parse("$endPointUrl2$url"):
+    Uri.parse("$endPointUrl1$url"),);
     request.fields.addAll(data);
     request.headers.addAll(await _getMultipartHeaders());
     if (file1Data != null && file1Key != null) {

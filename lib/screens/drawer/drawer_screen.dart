@@ -2,9 +2,11 @@ import 'package:atm/config/app_colors.dart';
 import 'package:atm/config/app_constant.dart';
 import 'package:atm/models/authentication/login_model.dart';
 import 'package:atm/repository/auth_repository.dart';
+import 'package:atm/screens/help_and_support/customer_support_screen.dart';
 import 'package:atm/screens/help_and_support/help_and_support_screen.dart';
 import 'package:atm/screens/refer_n_earn/refer_n_earn_screen.dart';
 import 'package:atm/screens/setting/setting_screen.dart';
+import 'package:atm/screens/transfer_plan/transfer_plan_screen.dart';
 import 'package:atm/screens/withdraw/withdraw_screen.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
@@ -125,6 +127,19 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 ListTile(
                   onTap: () {
                     PageNavigator.pop(context: context);
+                    PageNavigator.pushPage(context: context, page: const TransferPlanScreen());
+                  },
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(
+                    Icons.change_circle_outlined,
+                    color: AppColors.greyColor,
+                  ),
+                  title: DescriptionTextView(data: "Transfer Plan",fontWeight: FontWeight.w500, fontSize: 16,
+                      textColor: AppColors.blackColor.withOpacity(0.7)),
+                ),
+                ListTile(
+                  onTap: () {
+                    PageNavigator.pop(context: context);
                     PageNavigator.pushPage(context: context, page: const HelpAndSupportScreen());
                   },
                   contentPadding: EdgeInsets.zero,
@@ -146,6 +161,19 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     color: AppColors.greyColor,
                   ),
                   title: DescriptionTextView(data: "Settings",fontWeight: FontWeight.w500, fontSize: 16,
+                      textColor: AppColors.blackColor.withOpacity(0.7)),
+                ),
+                ListTile(
+                  onTap: () {
+                    PageNavigator.pop(context: context);
+                    PageNavigator.pushPage(context: context, page: const CustomerSupportScreen());
+                  },
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(
+                    Icons.support_agent_rounded,
+                    color: AppColors.greyColor,
+                  ),
+                  title: DescriptionTextView(data: "Customer Support",fontWeight: FontWeight.w500, fontSize: 16,
                       textColor: AppColors.blackColor.withOpacity(0.7)),
                 ),
                 ListTile(

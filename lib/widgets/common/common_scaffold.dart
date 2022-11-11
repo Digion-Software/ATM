@@ -5,10 +5,12 @@ import 'package:atm/widgets/common/text_widgets.dart';
 import 'package:flutter/material.dart';
 
 class CommonScaffold extends StatelessWidget {
-  const CommonScaffold({Key? key, required this.title, required this.child})
+  const CommonScaffold({Key? key, required this.title, required this.child,
+  this.horizontalPadding})
       : super(key: key);
   final String title;
   final Widget child;
+  final double? horizontalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class CommonScaffold extends StatelessWidget {
         children: [
           const Image(image: AssetImage(AppImages.bgShape)),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding ?? 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
