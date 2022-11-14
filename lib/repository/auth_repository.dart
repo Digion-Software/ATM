@@ -1,5 +1,6 @@
 import 'package:atm/config/api_endpoints.dart';
 import 'package:atm/config/app_constant.dart';
+import 'package:atm/models/authentication/countries_model.dart';
 import 'package:atm/models/authentication/login_model.dart';
 import 'package:atm/models/common/api_response.dart';
 import 'package:atm/models/simple_model.dart';
@@ -49,29 +50,23 @@ class AuthRepository {
 
   static Future validateAndGetOTPForNewRegister({
     required BuildContext context,
-    required String userFirstName,
-    required String userLastName,
-    required String userEmailAddress,
+    required String? userCountry,
     required String userPhone,
   }) async {
-    if (userFirstName.isEmpty) {
-      showToast(context: context, msg: "Enter first name.", isError: true);
-    } else if (userLastName.isEmpty) {
-      showToast(context: context, msg: "Enter last name.", isError: true);
-    } else if (userEmailAddress.isEmpty) {
-      showToast(context: context, msg: "Enter e-mail address.", isError: true);
-    } else if (!isValidEmail(userEmailAddress)) {
-      showToast(context: context, msg: "Enter valid e-mail address.", isError: true);
+    if (userCountry == null || userCountry.isEmpty) {
+      showToast(context: context, msg: "Select your country.", isError: true);
     } else if (userPhone.isEmpty) {
       showToast(context: context, msg: "Enter phone number.", isError: true);
     } else if (userPhone.length < 4 || userPhone.length > 12) {
       showToast(context: context, msg: "Enter valid phone number", isError: true);
     } else {
       showLoadingDialog(context: context);
-      APIResponse response = await HttpHandler.postMethod(
-          context: context,
-          url: APIEndpoints.newRegister,
-          data: {"user_email_address": userEmailAddress, "is_app": AppConstant.isApp, "action": APIActions.sendOTP});
+      APIResponse response = await HttpHandler.postMethod(context: context, url: APIEndpoints.newRegister, data: {
+        "user_country": userCountry,
+        "is_app": AppConstant.isApp,
+        "action": APIActions.sendOTP,
+        "user_phone": userPhone
+      });
       if (response.isSuccess) {
         hideLoadingDialog(context: context);
         SimpleModel simpleModel = simpleModelFromJson(response.data);
@@ -79,9 +74,7 @@ class AuthRepository {
             context: context,
             page: VerifyLoginScreen(
               phoneNumber: userPhone,
-              email: userEmailAddress,
-              firstName: userFirstName,
-              lastName: userLastName,
+              userCountry: userCountry,
               isForLogin: false,
             ));
         showToast(context: context, msg: simpleModel.message, isError: true);
@@ -95,20 +88,21 @@ class AuthRepository {
 
   static Future newRegisterUser({
     required BuildContext context,
-    required String userFirstName,
-    required String userLastName,
-    required String userEmailAddress,
+    required String userCountry,
     required String userPhone,
     required String otp,
   }) async {
     showLoadingDialog(context: context);
     APIResponse response = await HttpHandler.postMethod(context: context, url: APIEndpoints.createUser, data: {
-      "user_first_name": userFirstName,
-      "user_last_name": userLastName,
-      "user_email_address": userEmailAddress,
+      "user_country": userCountry,
       "user_phone": userPhone,
-      "is_app": AppConstant.isApp,
-      "otp": otp
+      "otp": otp,
+      "device_id": await LocalStorage.getString(key: AppConstant.deviceId),
+      "latitude": await LocalStorage.getDouble(key: AppConstant.latitude),
+      "longitude": await LocalStorage.getDouble(key: AppConstant.longitude),
+      "device_city": await LocalStorage.getString(key: AppConstant.deviceCity),
+      "device_state": await LocalStorage.getString(key: AppConstant.deviceState),
+      "device_country": await LocalStorage.getString(key: AppConstant.deviceCountry),
     });
     // if (response.isSuccess) {
     //   SimpleModel simpleModel = simpleModelFromJson(response.data);
@@ -155,7 +149,11 @@ class AuthRepository {
         hideLoadingDialog(context: context);
         SimpleModel simpleModel = simpleModelFromJson(response.data);
         PageNavigator.pushPage(
-            context: context, page: VerifyLoginScreen(isForLogin: true, phoneNumber: userPhoneNumber,));
+            context: context,
+            page: VerifyLoginScreen(
+              isForLogin: true,
+              phoneNumber: userPhoneNumber,
+            ));
         showToast(msg: simpleModel.message, context: context);
       } else {
         hideLoadingDialog(context: context);
@@ -187,11 +185,20 @@ class AuthRepository {
     }
   }
 
-  static Future<void> logout(BuildContext context)async{
+  static Future<CountriesModel?> getCounties({required BuildContext context}) async {
+    APIResponse response = await HttpHandler.getMethod(url: APIEndpoints.getCountries);
+    if (response.isSuccess) {
+      CountriesModel countriesModel = countriesModelFromJson(response.data);
+      return countriesModel;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<void> logout(BuildContext context) async {
     await LocalStorage.clearStorage();
     PageNavigator.pushAndRemoveUntilPage(context: context, page: const LoginScreen());
   }
-
 }
 
 bool isValidEmail(String email) {

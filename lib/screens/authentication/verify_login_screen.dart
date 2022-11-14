@@ -15,14 +15,10 @@ class VerifyLoginScreen extends StatefulWidget {
     Key? key,
     required this.phoneNumber,
     required this.isForLogin,
-    this.email,
-    this.firstName,
-    this.lastName,
+    this.userCountry,
   }) : super(key: key);
 
-  final String? firstName;
-  final String? lastName;
-  final String? email;
+  final String? userCountry;
   final String phoneNumber;
   final bool isForLogin;
 
@@ -58,7 +54,7 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
         children: [
           DescriptionTextView(
               data:
-                  "Enter Code that we have sent to your email\n${widget.isForLogin ? widget.phoneNumber : widget.email}",
+                  "Enter Code that we have sent to your phone\n${widget.phoneNumber}",
               fontSize: 14,
               textColor: AppColors.whiteColor),
           SizedBox(
@@ -133,9 +129,7 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
                 } else {
                   await AuthRepository.newRegisterUser(
                       context: context,
-                      userFirstName: widget.firstName!,
-                      userLastName: widget.lastName!,
-                      userEmailAddress: widget.email!,
+                      userCountry: widget.userCountry!,
                       userPhone: widget.phoneNumber,
                       otp: otpController.text);
                 }

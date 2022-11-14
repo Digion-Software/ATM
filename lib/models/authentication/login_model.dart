@@ -93,7 +93,7 @@ class UserData {
         userId: json["user_id"].toString(),
         authKey: json["auth_key"],
         name: json["name"],
-        email: json["email"],
+        email: json["email"].toString(),
         userPhone: json["user_phone"],
         userType: json["user_type"].toString(),
         walletCode: json["wallet_code"].toString(),

@@ -4,6 +4,7 @@ import 'package:atm/config/app_constant.dart';
 import 'package:atm/config/app_images.dart';
 import 'package:atm/models/app_update/app_update_model.dart';
 import 'package:atm/repository/app_update_repository.dart';
+import 'package:atm/repository/auth_repository.dart';
 import 'package:atm/screens/authentication/login_screen.dart';
 import 'package:atm/screens/dashboard/dashboard_screen.dart';
 import 'package:atm/screens/onboarding/onboarding_screen.dart';

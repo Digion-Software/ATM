@@ -1,7 +1,8 @@
 class APIEndpoints {
   APIEndpoints._();
 
-  static const String baseUrl = "http://anytimemoney.cash/";
+  // static const String baseUrl = "http://anytimemoney.cash/";
+  static const String baseUrl = "https://atm.alphapixclients.com/";
   static const String hostUrl1 = "ajaxfiles/";
   static const String hostUrl2 = "datatable/";
 
@@ -13,6 +14,7 @@ class APIEndpoints {
   static const String createUser = "create_user.php";
   static const String login = "login_check.php";
   static const String newRegister = "new_register_otp.php";
+  static const String getCountries = "get_countries.php";
 
   ///HOME TAB
   static const String getDashboardData = "get_dashboard_data.php";
