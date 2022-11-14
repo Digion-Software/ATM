@@ -66,6 +66,7 @@ class CommonTextField extends StatelessWidget {
   final bool isReadOnly;
   final TextAlign textAlignment;
 
+
   @override
   Widget build(BuildContext context) {
     return Column(

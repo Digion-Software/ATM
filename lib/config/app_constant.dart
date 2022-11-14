@@ -8,8 +8,17 @@ class AppConstant {
   //AUTHENTICATION AND USER DETAILS
   static const String token = "TOKEN";
   static const String userId = "USER-ID";
+  static const String deviceId = "DEVICE-ID";
+  static const String latitude = "LATITUDE";
+  static const String longitude = "LONGITUDE";
+  static const String deviceCity = "DEVICE-CITY";
+  static const String deviceState = "DEVICE-STATE";
+  static const String deviceCountry = "DEVICE-COUNTRY";
+
+
   static const String isLoggedIn = "IS-LOGIN";
   static const String userDetails = "USER-DETAILS";
+  static const String countriesModel = "COUNTRIES-MODEL";
   static const String paymentMethodForDeposit = "PAYMENT-METHOD-FOR-DEPOSIT";
 }
 
