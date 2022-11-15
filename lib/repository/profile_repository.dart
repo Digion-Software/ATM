@@ -2,6 +2,7 @@ import 'package:atm/config/api_endpoints.dart';
 import 'package:atm/config/app_constant.dart';
 import 'package:atm/models/common/api_response.dart';
 import 'package:atm/models/profile/profile_data_model.dart';
+import 'package:atm/models/profile/profile_status_model.dart';
 import 'package:atm/models/simple_model.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
@@ -24,10 +25,27 @@ class ProfileRepository {
     }
   }
 
+  static Future<ProfileStatusModel?> getProfileStatus({required BuildContext context}) async {
+    APIResponse apiResponse = await HttpHandler.postMethod(context: context, url: APIEndpoints.profileStatus, data: {
+      "is_app": AppConstant.isApp,
+      "user_id": await LocalStorage.getString(key: AppConstant.userId),
+      "auth_key": await LocalStorage.getString(key: AppConstant.token),
+    });
+    if (apiResponse.isSuccess) {
+      return profileStatusModelFromJson(apiResponse.data);
+    } else {
+      return profileStatusModelFromJson(apiResponse.data);
+    }
+  }
+
   static Future validateAndUpdateProfileData({
     required BuildContext context,
     required String userFirstName,
     required String userLastName,
+    required String userEmail,
+    required String userDOB,
+    required String userGender,
+    required String userAddress,
     required Function(bool) isUpdate,
   }) async {
     if (userFirstName.isEmpty) {
@@ -43,6 +61,10 @@ class ProfileRepository {
         "auth_key": await LocalStorage.getString(key: AppConstant.token),
         "user_first_name": userFirstName,
         "user_last_name": userLastName,
+        "user_email": userEmail,
+        "user_dob": userDOB,
+        "gender": userGender,
+        "user_address": userAddress,
       });
       if (apiResponse.isSuccess) {
         SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);

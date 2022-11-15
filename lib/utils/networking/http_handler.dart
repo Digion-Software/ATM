@@ -50,17 +50,15 @@ class HttpHandler {
     }
   }
 
-  static Future<APIResponse> getMethod({required String url,bool useSecondUrl = false}) async {
+  static Future<APIResponse> getMethod({required String url, bool useSecondUrl = false}) async {
     var header = await _getHeaders();
-    if(useSecondUrl) {
+    if (useSecondUrl) {
       showLogs(message: "GET URL -- '$endPointUrl2$url'");
-    }
-    else{
+    } else {
       showLogs(message: "GET URL -- '$endPointUrl1$url'");
     }
     http.Response response = await http.get(
-      useSecondUrl ? Uri.parse("$endPointUrl2$url"):
-      Uri.parse("$endPointUrl1$url"),
+      useSecondUrl ? Uri.parse("$endPointUrl2$url") : Uri.parse("$endPointUrl1$url"),
       headers: header,
     );
     showLogs(message: "GET RESPONSE CODE -- '${response.statusCode}'");
@@ -80,26 +78,26 @@ class HttpHandler {
   }
 
   static Future<APIResponse> postMethod(
-      {required BuildContext context, required String url, Map<String, dynamic>? data,bool useSecondUrl = false}) async {
+      {required BuildContext context,
+      required String url,
+      Map<String, dynamic>? data,
+      bool useSecondUrl = false}) async {
     var header = await _getHeaders();
-    if(useSecondUrl) {
+    if (useSecondUrl) {
       showLogs(message: "POST URL -- '$endPointUrl2$url'");
-    }
-    else{
+    } else {
       showLogs(message: "POST URL -- '$endPointUrl1$url'");
     }
     showLogs(message: "POST DATA -- '$data'");
     http.Response response = await http.post(
-      useSecondUrl ? Uri.parse("$endPointUrl2$url"):
-      Uri.parse("$endPointUrl1$url"),
+      useSecondUrl ? Uri.parse("$endPointUrl2$url") : Uri.parse("$endPointUrl1$url"),
       headers: header,
       body: data == null ? null : jsonEncode(data),
     );
     showLogs(message: "POST RESPONSE CODE -- '${response.statusCode}'");
     showLogs(message: "POST RESPONSE -- '${response.body}'");
 
-    log(
-        "TEST ::${(json.decode(response.body)["status"] == null ? response.statusCode.toString().toLowerCase() : json.decode(response.body)["status"].toString().toLowerCase()) == "error"} || ${(json.decode(response.body)["message"] == null ? response.statusCode.toString().toLowerCase() : json.decode(response.body)["message"].toString().toLowerCase()) == "invalid auth key!"}");
+    log("TEST ::${(json.decode(response.body)["status"] == null ? response.statusCode.toString().toLowerCase() : json.decode(response.body)["status"].toString().toLowerCase()) == "error"} || ${(json.decode(response.body)["message"] == null ? response.statusCode.toString().toLowerCase() : json.decode(response.body)["message"].toString().toLowerCase()) == "invalid auth key!"}");
     if ((json.decode(response.body)["status"] == null
                 ? response.statusCode.toString().toLowerCase()
                 : json.decode(response.body)["status"].toString().toLowerCase()) ==
@@ -199,24 +197,26 @@ class HttpHandler {
     }
   }*/
 
-  static Future<APIResponse> postMultiPartRequestMethod({
-    required String url,
-    required Map<String, String> data,
-    File? file1Data,
-    String? file1Key,
-    File? file2Data,
-    String? file2Key,
-    File? file3Data,
-    String? file3Key,
-    bool useSecondUrl = false
-  }) async {
-    var request = http.MultipartRequest("POST", useSecondUrl ? Uri.parse("$endPointUrl2$url"):
-    Uri.parse("$endPointUrl1$url"),);
+  static Future<APIResponse> postMultiPartRequestMethod(
+      {required String url,
+      required Map<String, String> data,
+      File? file1Data,
+      String? file1Key,
+      File? file2Data,
+      String? file2Key,
+      File? file3Data,
+      String? file3Key,
+      bool useSecondUrl = false}) async {
+    var request = http.MultipartRequest(
+      "POST",
+      useSecondUrl ? Uri.parse("$endPointUrl2$url") : Uri.parse("$endPointUrl1$url"),
+    );
     request.fields.addAll(data);
     request.headers.addAll(await _getMultipartHeaders());
     if (file1Data != null && file1Key != null) {
       request.files.add(await http.MultipartFile.fromPath(file1Key, file1Data.path));
-    }if (file2Data != null && file2Key != null) {
+    }
+    if (file2Data != null && file2Key != null) {
       request.files.add(await http.MultipartFile.fromPath(file2Key, file2Data.path));
     }
     if (file3Data != null && file3Key != null) {
@@ -228,7 +228,6 @@ class HttpHandler {
     showLogs(message: "STREAM URL -- ${request.url}");
     showLogs(message: "STREAM HEADERS -- ${request.headers}");
     showLogs(message: "STREAM FIELDS -- ${request.fields}");
-    showLogs(message: "STREAM FILES -- ${request.files.first.contentType.parameters}");
     http.StreamedResponse response = await request.send();
     showLogs(message: "STREAM RESPONSE -- ${response.statusCode}");
     http.Response responsed = await http.Response.fromStream(response);

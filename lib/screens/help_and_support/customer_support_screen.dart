@@ -89,7 +89,12 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                                         ? InkWell(
                                             onTap: () {
                                               PageNavigator.pushPage(
-                                                  context: context, page: const CustomerSupportChatScreen());
+                                                  context: context,
+                                                  page: CustomerSupportChatScreen(
+                                                    ticketId: ticketListModel!.aaData![index].ticketChatId ?? "",
+                                                  )).whenComplete(() {
+                                                getAllTicket();
+                                              });
                                             },
                                             child: Container(
                                               height: 25,
@@ -140,7 +145,9 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          PageNavigator.pushPage(context: context, page: const CreateTicketScreen());
+          PageNavigator.pushPage(context: context, page: const CreateTicketScreen()).whenComplete(() {
+            getAllTicket();
+          });
         },
         backgroundColor: AppColors.primaryColor,
         child: const Center(child: Icon(Icons.add)),

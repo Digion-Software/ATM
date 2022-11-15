@@ -11,6 +11,7 @@ import 'package:atm/models/ticket/view_ticket_chat_model.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
+import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:atm/utils/networking/http_handler.dart';
 import 'package:flutter/material.dart';
 
@@ -79,6 +80,7 @@ class TicketRepository {
         SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
         hideLoadingDialog(context: context);
         showToast(msg: simpleModel.message, context: context);
+        PageNavigator.pop(context: context);
       } else {
         SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
         hideLoadingDialog(context: context);
@@ -87,10 +89,10 @@ class TicketRepository {
     }
   }
 
-  static Future<ViewTicketChatModel?> viewTicketChat({required BuildContext context}) async {
+  static Future<ViewTicketChatModel?> viewTicketChat({required BuildContext context, required String ticketId}) async {
     APIResponse apiResponse = await HttpHandler.postMethod(url: APIEndpoints.viewTicketChat, context: context, data: {
       "is_app": AppConstant.isApp,
-      "ticket_id": "63",
+      "ticket_id": ticketId,
       "user_id": await LocalStorage.getString(key: AppConstant.userId),
       "auth_key": await LocalStorage.getString(key: AppConstant.token),
     });
@@ -98,6 +100,42 @@ class TicketRepository {
       return viewTicketChatModelFromJson(apiResponse.data);
     } else {
       return viewTicketChatModelFromJson(apiResponse.data);
+    }
+  }
+
+  static Future<void> replayTicket({
+    required BuildContext context,
+    required String ticketChatId,
+    required String ticketTitle,
+    required String subject,
+    required String ticketBody,
+    required Function(bool) onSuccess,
+    File? attachment,
+  }) async {
+    showLoadingDialog(context: context);
+    APIResponse apiResponse = await HttpHandler.postMultiPartRequestMethod(
+        url: APIEndpoints.replayTicket,
+        data: {
+          "is_app": AppConstant.isApp.toString(),
+          "ticketChatID": ticketChatId,
+          "ticketTitle": ticketTitle,
+          "subject": subject,
+          "ticketBody": ticketBody,
+          "user_id": await LocalStorage.getString(key: AppConstant.userId) ?? "",
+          "auth_key": await LocalStorage.getString(key: AppConstant.token) ?? "",
+        },
+        file1Key: "attachment",
+        file1Data: attachment);
+    if (apiResponse.isSuccess) {
+      SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
+      onSuccess(true);
+      hideLoadingDialog(context: context);
+      showToast(msg: simpleModel.message, context: context);
+    } else {
+      SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
+      onSuccess(true);
+      hideLoadingDialog(context: context);
+      showToast(msg: simpleModel.message, context: context);
     }
   }
 }

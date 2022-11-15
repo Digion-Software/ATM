@@ -54,6 +54,7 @@ class CommonTextField extends StatelessWidget {
     required this.iconChild,
     this.isReadOnly = false,
     this.textAlignment = TextAlign.start,
+    this.onTap,
   }) : super(key: key);
 
   final String title;
@@ -65,7 +66,7 @@ class CommonTextField extends StatelessWidget {
   final Widget iconChild;
   final bool isReadOnly;
   final TextAlign textAlignment;
-
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +103,7 @@ class CommonTextField extends StatelessWidget {
                       color: AppColors.blackColor,
                       fontWeight: FontWeight.w400,
                     ),
+                    onTap: onTap,
                     keyboardType: keyBoardType,
                     obscureText: isObscure,
                     textAlign: textAlignment,

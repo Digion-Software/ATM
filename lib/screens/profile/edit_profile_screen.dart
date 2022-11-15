@@ -5,9 +5,10 @@ import 'package:atm/widgets/common/button_view.dart';
 import 'package:atm/widgets/common/common_scaffold.dart';
 import 'package:atm/widgets/common/text_field_view.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({Key? key,required this.profileDataModel, required this.isUpdated}) : super(key: key);
+  const EditProfile({Key? key, required this.profileDataModel, required this.isUpdated}) : super(key: key);
 
   final ProfileDataModel profileDataModel;
   final Function(bool) isUpdated;
@@ -20,6 +21,9 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController dateOfBirthController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   @override
   void initState() {
@@ -54,7 +58,7 @@ class _EditProfileState extends State<EditProfile> {
               const SizedBox(height: 20),
               CommonTextField(
                 title: "Email",
-                hintText: "Enter Email",
+                hintText: "Enter Your Email",
                 controller: emailController,
                 iconChild: const SizedBox(),
                 isObscure: false,
@@ -66,19 +70,54 @@ class _EditProfileState extends State<EditProfile> {
                 controller: phoneController,
                 iconChild: const SizedBox(),
                 isObscure: false,
+                isReadOnly: true,
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 20),
+              CommonTextField(
+                onTap: () async {
+                  await selectDate(context: context, initialDate: DateTime.now());
+                },
+                title: "Date Of Birth",
+                hintText: "Enter Your DOB",
+                controller: dateOfBirthController,
+                iconChild: const SizedBox(),
+                isObscure: false,
+                isReadOnly: true,
+              ),
+              const SizedBox(height: 20),
+              CommonTextField(
+                title: "Gender",
+                hintText: "Enter Your Gender",
+                controller: genderController,
+                iconChild: const SizedBox(),
+                isObscure: false,
+              ),
+              const SizedBox(height: 20),
+              CommonTextField(
+                title: "Address",
+                hintText: "Enter Your Address",
+                controller: addressController,
+                iconChild: const SizedBox(),
+                isObscure: false,
+              ),
+              const SizedBox(height: 20),
               ButtonView(
                 title: "SAVE",
                 textColor: AppColors.whiteColor,
                 onTap: () async {
                   await ProfileRepository.validateAndUpdateProfileData(
-                      context: context,
-                      userFirstName: firstNameController.text,
-                      userLastName: lastNameController.text,
-                      isUpdate: widget.isUpdated);
+                    context: context,
+                    userFirstName: firstNameController.text,
+                    userLastName: lastNameController.text,
+                    userEmail: emailController.text,
+                    userGender: genderController.text,
+                    userDOB: dateOfBirthController.text,
+                    userAddress: addressController.text,
+                    isUpdate: widget.isUpdated,
+                  );
                 },
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -87,9 +126,28 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   setData() {
-    firstNameController.text = widget.profileDataModel.transactionData!.firstName;
-    lastNameController.text = widget.profileDataModel.transactionData!.userLastName;
-    emailController.text = widget.profileDataModel.transactionData!.userEmail;
-    phoneController.text = widget.profileDataModel.transactionData!.userPhone.replaceAll("-", " ");
+    firstNameController.text = widget.profileDataModel.data!.userFirstName ?? "";
+    lastNameController.text = widget.profileDataModel.data!.userLastName ?? "";
+    emailController.text = widget.profileDataModel.data!.userEmail ?? "";
+    phoneController.text = widget.profileDataModel.data!.userPhone ?? "";
+    genderController.text = widget.profileDataModel.data!.gender ?? "";
+    dateOfBirthController.text = widget.profileDataModel.data!.userDob ?? "";
+    addressController.text = widget.profileDataModel.data!.userAddress ?? "";
+  }
+
+  Future<void> selectDate({
+    required BuildContext context,
+    required DateTime initialDate,
+  }) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime(1950),
+        lastDate: DateTime.now());
+    if (picked != null) {
+      initialDate = picked;
+      dateOfBirthController.text = DateFormat.yMd().format(initialDate);
+    }
   }
 }

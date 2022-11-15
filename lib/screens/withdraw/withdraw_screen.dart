@@ -1,10 +1,13 @@
 import 'package:atm/config/app_colors.dart';
 import 'package:atm/models/bank/bank_model.dart';
+import 'package:atm/models/profile/profile_status_model.dart';
 import 'package:atm/models/withdrawal/get_withdrawal_list_model.dart';
 import 'package:atm/repository/bank_repository.dart';
+import 'package:atm/repository/profile_repository.dart';
 import 'package:atm/repository/withdrawal_repository.dart';
 import 'package:atm/screens/bank/add_bank_account_screen.dart';
 import 'package:atm/screens/home_tab/home_screen.dart';
+import 'package:atm/screens/kyc/kyc_screen.dart';
 import 'package:atm/screens/withdraw/withdrawal_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
@@ -54,23 +57,38 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                       child: WithdrawalBoxView(
                         data: withdrawalListModel!.withdrawalData![index],
                         onTransferPlanPressed: () {},
-                        onDepositPressed: () {
-                          showOptionForDeposit(
-                              context: context,
-                              withdrawalDatum: withdrawalListModel!.withdrawalData![index],
-                              onComplete: () {
-                                getWithdrawalData();
-                              });
-                        },
-                        onWithdrawalPressed: () {
-                          showOptionForWithdraw(
-                            index: index,
+                        onCapitalWithdrawalPressed: () {
+                          // showOptionForDeposit(
+                          //     context: context,
+                          //     withdrawalDatum: withdrawalListModel!.withdrawalData![index],
+                          //     onComplete: () {
+                          //       getWithdrawalData();
+                          //     });
+                          showOptionForBankOrUPI(
                             context: context,
+                            index: index,
+                            withdrawType: WithdrawType.capital_withdrawal,
                             withdrawalDatum: withdrawalListModel!.withdrawalData![index],
-                            capitalAmount:
+                            amount:
                                 double.parse((withdrawalListModel!.withdrawalData![index].invested ?? 0).toString()),
-                            profitAmount:
-                                double.parse((withdrawalListModel!.withdrawalData![index].profit ?? 0).toString()),
+                          );
+                        },
+                        onProfitWithdrawalPressed: () {
+                          // showOptionForWithdraw(
+                          //   index: index,
+                          //   context: context,
+                          //   withdrawalDatum: withdrawalListModel!.withdrawalData![index],
+                          //   capitalAmount:
+                          //       double.parse((withdrawalListModel!.withdrawalData![index].invested ?? 0).toString()),
+                          //   profitAmount:
+                          //       double.parse((withdrawalListModel!.withdrawalData![index].profit ?? 0).toString()),
+                          // );
+                          showOptionForBankOrUPI(
+                            context: context,
+                            index: index,
+                            withdrawType: WithdrawType.capital_withdrawal,
+                            withdrawalDatum: withdrawalListModel!.withdrawalData![index],
+                            amount: double.parse((withdrawalListModel!.withdrawalData![index].profit ?? 0).toString()),
                           );
                         },
                       ),
@@ -92,147 +110,157 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
   }
 }
 
-void showOptionForWithdraw({
+Future<void> showOptionForWithdraw({
   required BuildContext context,
   required int index,
   required WithdrawalDatum withdrawalDatum,
   required double capitalAmount,
   required double profitAmount,
-}) {
-  showModalBottomSheet(
-    context: context,
-    backgroundColor: Colors.transparent,
-    elevation: 10,
-    builder: (context) {
-      return Container(
-        decoration:
-            const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(20)), color: Colors.white),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              margin: const EdgeInsets.only(top: 20, bottom: 10),
-              child: const Text(
-                "Select option for withdrawal",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                showOptionForBankOrUPI(
-                    context: context,
-                    index: index,
-                    withdrawType: WithdrawType.capital_withdrawal,
-                    withdrawalDatum: withdrawalDatum,
-                    amount: capitalAmount);
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Row(
-                  children: const [Expanded(child: Text("CAPITAL WITHDRAWAL")), Icon(Icons.arrow_forward_ios)],
+}) async {
+  ProfileStatusModel? profileStatusModel = await ProfileRepository.getProfileStatus(context: context);
+  if (profileStatusModel!.profileStatus == false) {
+    PageNavigator.pushPage(context: context, page: const KYCScreen(isEditable: true));
+  } else {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      elevation: 10,
+      builder: (context) {
+        return Container(
+          decoration:
+              const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(20)), color: Colors.white),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                margin: const EdgeInsets.only(top: 20, bottom: 10),
+                child: const Text(
+                  "Select option for withdrawal",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                showOptionForBankOrUPI(
-                    context: context,
-                    index: index,
-                    withdrawType: WithdrawType.profit_withdrawal,
-                    withdrawalDatum: withdrawalDatum,
-                    amount: profitAmount);
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Row(
-                  children: const [Expanded(child: Text("PROFIT WITHDRAWAL")), Icon(Icons.arrow_forward_ios)],
+              InkWell(
+                onTap: () {
+                  showOptionForBankOrUPI(
+                      context: context,
+                      index: index,
+                      withdrawType: WithdrawType.capital_withdrawal,
+                      withdrawalDatum: withdrawalDatum,
+                      amount: capitalAmount);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    children: const [Expanded(child: Text("CAPITAL WITHDRAWAL")), Icon(Icons.arrow_forward_ios)],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
+              InkWell(
+                onTap: () {
+                  showOptionForBankOrUPI(
+                      context: context,
+                      index: index,
+                      withdrawType: WithdrawType.profit_withdrawal,
+                      withdrawalDatum: withdrawalDatum,
+                      amount: profitAmount);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    children: const [Expanded(child: Text("PROFIT WITHDRAWAL")), Icon(Icons.arrow_forward_ios)],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
-void showOptionForBankOrUPI(
+Future<void> showOptionForBankOrUPI(
     {required BuildContext context,
     required int index,
     required double amount,
     required WithdrawType withdrawType,
-    required WithdrawalDatum withdrawalDatum}) {
-  showModalBottomSheet(
-    context: context,
-    backgroundColor: Colors.transparent,
-    elevation: 10,
-    builder: (context) {
-      return Container(
-        decoration:
-            const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(20)), color: Colors.white),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              margin: const EdgeInsets.only(top: 20, bottom: 10),
-              child: const Text(
-                "Withdrawal to Bank or UPI",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                showBankOption(
-                    context: context, withdrawType: withdrawType, withdrawalDatum: withdrawalDatum, amount: amount);
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Row(
-                  children: const [Expanded(child: Text("BANK")), Icon(Icons.arrow_forward_ios)],
+    required WithdrawalDatum withdrawalDatum}) async {
+  ProfileStatusModel? profileStatusModel = await ProfileRepository.getProfileStatus(context: context);
+  if (profileStatusModel!.profileStatus == false) {
+    PageNavigator.pushPage(context: context, page: const KYCScreen(isEditable: true));
+  } else {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      elevation: 10,
+      builder: (context) {
+        return Container(
+          decoration:
+              const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(20)), color: Colors.white),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                margin: const EdgeInsets.only(top: 20, bottom: 10),
+                child: const Text(
+                  "Withdrawal to Bank or UPI",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
-            ),
-            InkWell(
-              onTap: () {
-                PageNavigator.pushPage(
-                  context: context,
-                  page: WithdrawalScreen(
-                    withdrawType: withdrawType,
-                    withdrawalDatum: withdrawalDatum,
-                    bankDatum: null,
-                    maxAmount: amount,
-                    withdrawalTo: "upi",
+              InkWell(
+                onTap: () {
+                  showBankOption(
+                      context: context, withdrawType: withdrawType, withdrawalDatum: withdrawalDatum, amount: amount);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    children: const [Expanded(child: Text("BANK")), Icon(Icons.arrow_forward_ios)],
                   ),
-                );
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                child: Row(
-                  children: const [Expanded(child: Text("UPI")), Icon(Icons.arrow_forward_ios)],
                 ),
               ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
+              InkWell(
+                onTap: () {
+                  PageNavigator.pushPage(
+                    context: context,
+                    page: WithdrawalScreen(
+                      withdrawType: withdrawType,
+                      withdrawalDatum: withdrawalDatum,
+                      bankDatum: null,
+                      maxAmount: amount,
+                      withdrawalTo: "upi",
+                    ),
+                  );
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    children: const [Expanded(child: Text("UPI")), Icon(Icons.arrow_forward_ios)],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 void showBankOption(

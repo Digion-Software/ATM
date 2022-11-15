@@ -30,6 +30,7 @@ class APIEndpoints {
 
   ///PROFILE
   static const String profile = "profile_manage.php";
+  static const String profileStatus = "get_user_prefrence.php";
 
   ///BANK
   static const String bankManage = "bank_manage.php";
@@ -52,4 +53,8 @@ class APIEndpoints {
   static const String ticketOption = "common_api.php";
   static const String createTicket = "customer_support.php";
   static const String viewTicketChat = "view_ticket.php";
+  static const String replayTicket = "replay_ticket.php";
+
+  ///TRANSFER PLAN
+  static const String internalTransfer = "internal_transfer.php";
 }

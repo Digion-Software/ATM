@@ -1,51 +1,15 @@
 // To parse this JSON data, do
 //
-//     final profileDataModel = profileDataModelFromJson(jsonString);
+//     final profileStatusModel = profileStatusModelFromJson(jsonString);
 
 import 'dart:convert';
 
-ProfileDataModel profileDataModelFromJson(String str) => ProfileDataModel.fromJson(json.decode(str));
+ProfileStatusModel profileStatusModelFromJson(String str) => ProfileStatusModel.fromJson(json.decode(str));
 
-String profileDataModelToJson(ProfileDataModel data) => json.encode(data.toJson());
+String profileStatusModelToJson(ProfileStatusModel data) => json.encode(data.toJson());
 
-class ProfileDataModel {
-  ProfileDataModel({
-    required this.status,
-    required this.data,
-    required this.totalCapital,
-  });
-
-  final String? status;
-  final ProfileDatum? data;
-  final String? totalCapital;
-
-  ProfileDataModel copyWith({
-    String? status,
-    ProfileDatum? data,
-    String? totalCapital,
-  }) =>
-      ProfileDataModel(
-        status: status ?? this.status,
-        data: data ?? this.data,
-        totalCapital: totalCapital ?? this.totalCapital,
-      );
-
-  factory ProfileDataModel.fromJson(Map<String, dynamic> json) => ProfileDataModel(
-        status: json["status"],
-        data: json["data"] == null ? null : ProfileDatum.fromJson(json["data"]),
-        totalCapital: json["total_capital"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "status": status,
-        "data": data == null ? null : data!.toJson(),
-        "total_capital": totalCapital,
-      };
-}
-
-class ProfileDatum {
-  ProfileDatum({
-    required this.userId,
+class ProfileStatusModel {
+  ProfileStatusModel({
     required this.userFirstName,
     required this.userLastName,
     required this.userName,
@@ -61,7 +25,6 @@ class ProfileDatum {
     required this.kycStatus,
   });
 
-  final String? userId;
   final String? userFirstName;
   final String? userLastName;
   final String? userName;
@@ -76,8 +39,7 @@ class ProfileDatum {
   final bool? profileStatus;
   final String? kycStatus;
 
-  ProfileDatum copyWith({
-    String? userId,
+  ProfileStatusModel copyWith({
     String? userFirstName,
     String? userLastName,
     String? userName,
@@ -92,8 +54,7 @@ class ProfileDatum {
     bool? profileStatus,
     String? kycStatus,
   }) =>
-      ProfileDatum(
-        userId: userId ?? this.userId,
+      ProfileStatusModel(
         userFirstName: userFirstName ?? this.userFirstName,
         userLastName: userLastName ?? this.userLastName,
         userName: userName ?? this.userName,
@@ -109,8 +70,7 @@ class ProfileDatum {
         kycStatus: kycStatus ?? this.kycStatus,
       );
 
-  factory ProfileDatum.fromJson(Map<String, dynamic> json) => ProfileDatum(
-        userId: json["user_id"],
+  factory ProfileStatusModel.fromJson(Map<String, dynamic> json) => ProfileStatusModel(
         userFirstName: json["user_first_name"],
         userLastName: json["user_last_name"],
         userName: json["user_name"],
@@ -127,7 +87,6 @@ class ProfileDatum {
       );
 
   Map<String, dynamic> toJson() => {
-        "user_id": userId,
         "user_first_name": userFirstName,
         "user_last_name": userLastName,
         "user_name": userName,

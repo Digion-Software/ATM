@@ -4,12 +4,16 @@ import 'package:atm/config/app_text_style.dart';
 import 'package:atm/models/app_update/razorpay_config_model.dart';
 import 'package:atm/models/dashboard/dashboard_model.dart';
 import 'package:atm/models/kyc/kyc_status_model.dart';
+import 'package:atm/models/profile/profile_data_model.dart';
+import 'package:atm/models/profile/profile_status_model.dart';
 import 'package:atm/models/withdrawal/get_withdrawal_list_model.dart';
 import 'package:atm/repository/app_update_repository.dart';
 import 'package:atm/repository/home_repository.dart';
 import 'package:atm/repository/kyc_repository.dart';
+import 'package:atm/repository/profile_repository.dart';
 import 'package:atm/screens/deposit_tab/deposit_screen.dart';
 import 'package:atm/screens/plan_detail/plan_detail_screen.dart';
+import 'package:atm/screens/profile/edit_profile_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/common/type_strings.dart';
@@ -84,7 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: MediaQuery.of(context).size.width - 30,
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                      image: NetworkImage(_dashboardModel!.sliderData![index].bannerImage!),fit: BoxFit.fill)),
+                                      image: NetworkImage(_dashboardModel!.sliderData![index].bannerImage!),
+                                      fit: BoxFit.fill)),
                               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                               /*child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +111,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  const DescriptionTextView(data: "Investment Plans", fontWeight: FontWeight.w600, topPadding: 15,textColor: AppColors.textBluGreyColor),
+                  const DescriptionTextView(
+                      data: "Investment Plans",
+                      fontWeight: FontWeight.w600,
+                      topPadding: 15,
+                      textColor: AppColors.textBluGreyColor),
                   ...List.generate(
                     _dashboardModel!.planData!.length,
                     (index) {
@@ -214,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
 InkWell investButton(
     {required BuildContext context, required WithdrawalDatum withdrawalDatum, required Function() onComplete}) {
   return InkWell(
-    onTap: (){
+    onTap: () {
       showOptionForDeposit(context: context, withdrawalDatum: withdrawalDatum, onComplete: onComplete);
       // PageNavigator.pushPage(context: context, page: const PlanDetailScreen());
     },
@@ -234,122 +243,146 @@ InkWell investButton(
 }
 
 void showOptionForDeposit(
-    {required BuildContext context, required WithdrawalDatum withdrawalDatum, required Function() onComplete}) async{
-
-  String paymentMethodForDeposit = await LocalStorage.getString(key: AppConstant.paymentMethodForDeposit) ?? "";
-  if(paymentMethodForDeposit.toLowerCase() == "both"){
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      elevation: 10,
-      builder: (context) {
-        return Container(
-          decoration:
-          const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(20)), color: Colors.white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                margin: const EdgeInsets.only(top: 20, bottom: 10),
-                child: const SimpleTextView(
-                  data: "Select option for deposit",
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
+    {required BuildContext context, required WithdrawalDatum withdrawalDatum, required Function() onComplete}) async {
+  ProfileStatusModel? profileStatusModel = await ProfileRepository.getProfileStatus(context: context);
+  if (profileStatusModel!.profileStatus == false) {
+    PageNavigator.pushPage(
+        context: context,
+        page: EditProfile(
+            profileDataModel: ProfileDataModel(
+                status: null,
+                totalCapital: null,
+                data: ProfileDatum(
+                  userId: await LocalStorage.getString(key: AppConstant.userId) ?? "",
+                  userFirstName: profileStatusModel.userFirstName!,
+                  userEmail: profileStatusModel.userEmail!,
+                  userLastName: profileStatusModel.userEmail!,
+                  userPhone: profileStatusModel.userPhone!,
+                  userName: profileStatusModel.userPhone!,
+                  userCountry: profileStatusModel.userCountry!,
+                  mobileCode: null,
+                  userDob: profileStatusModel.userDob!,
+                  gender: profileStatusModel.gender!,
+                  userAddress: profileStatusModel.userAddress!,
+                  walletCode: profileStatusModel.walletCode!,
+                  profileStatus: null,
+                  kycStatus: null,
+                )),
+            isUpdated: (v) {}));
+  } else {
+    String paymentMethodForDeposit = await LocalStorage.getString(key: AppConstant.paymentMethodForDeposit) ?? "";
+    if (paymentMethodForDeposit.toLowerCase() == "both") {
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        elevation: 10,
+        builder: (context) {
+          return Container(
+            decoration:
+                const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(20)), color: Colors.white),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.only(top: 20, bottom: 10),
+                  child: const SimpleTextView(
+                    data: "Select option for deposit",
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        RazorPayConfigModel? razorPayConfigModel =
-                        await AppUpdateRepository.checkRazorPayConfiguration(context: context);
-                        if (razorPayConfigModel != null) {
-                          PageNavigator.pop(context: context);
-                          if (razorPayConfigModel.data.razorpayStatus == "enable") {
+                Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          RazorPayConfigModel? razorPayConfigModel =
+                              await AppUpdateRepository.checkRazorPayConfiguration(context: context);
+                          if (razorPayConfigModel != null) {
+                            PageNavigator.pop(context: context);
+                            if (razorPayConfigModel.data.razorpayStatus == "enable") {
+                              PageNavigator.pushPage(
+                                context: context,
+                                page: PlanDetailScreen(
+                                  depositType: DepositType.online_deposit,
+                                  withdrawalDatum: withdrawalDatum,
+                                  razorPayConfigModel: razorPayConfigModel,
+                                ),
+                              ).whenComplete(() {
+                                onComplete();
+                              });
+                            } else {
+                              showToast(context: context, msg: "Online deposit will be available soon!", isError: true);
+                            }
+                          }
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          child: Row(
+                            children: const [Expanded(child: Text("ONLINE DEPOSITE")), Icon(Icons.arrow_forward_ios)],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () async {
+                          RazorPayConfigModel? razorPayConfigModel =
+                              await AppUpdateRepository.checkRazorPayConfiguration(context: context);
+                          if (razorPayConfigModel != null) {
+                            PageNavigator.pop(context: context);
                             PageNavigator.pushPage(
                               context: context,
                               page: PlanDetailScreen(
-                                depositType: DepositType.online_deposit,
+                                depositType: DepositType.manual_deposit,
                                 withdrawalDatum: withdrawalDatum,
                                 razorPayConfigModel: razorPayConfigModel,
                               ),
                             ).whenComplete(() {
                               onComplete();
                             });
-                          } else {
-                            showToast(context: context, msg: "Online deposit will be available soon!", isError: true);
                           }
-                        }
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        child: Row(
-                          children: const [Expanded(child: Text("ONLINE DEPOSITE")), Icon(Icons.arrow_forward_ios)],
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          child: Row(
+                            children: const [Expanded(child: Text("MANUAL DEPOSIT")), Icon(Icons.arrow_forward_ios)],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        RazorPayConfigModel? razorPayConfigModel =
-                        await AppUpdateRepository.checkRazorPayConfiguration(context: context);
-                        if (razorPayConfigModel != null) {
-                          PageNavigator.pop(context: context);
-                          PageNavigator.pushPage(
-                            context: context,
-                            page: PlanDetailScreen(
-                              depositType: DepositType.manual_deposit,
-                              withdrawalDatum: withdrawalDatum,
-                              razorPayConfigModel: razorPayConfigModel,
-                            ),
-                          ).whenComplete(() {
-                            onComplete();
-                          });
-                        }
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        child: Row(
-                          children: const [Expanded(child: Text("MANUAL DEPOSIT")), Icon(Icons.arrow_forward_ios)],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-  else{
-    RazorPayConfigModel? razorPayConfigModel =
-    await AppUpdateRepository.checkRazorPayConfiguration(context: context);
-    if (razorPayConfigModel != null) {
-      if (razorPayConfigModel.data.razorpayStatus == "enable") {
-        PageNavigator.pushPage(
-          context: context,
-          page: PlanDetailScreen(
-            depositType: DepositType.online_deposit,
-            withdrawalDatum: withdrawalDatum,
-            razorPayConfigModel: razorPayConfigModel,
-          ),
-        ).whenComplete(() {
-          onComplete();
-        });
-      } else {
-        showToast(context: context, msg: "Online deposit will be available soon!", isError: true);
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } else {
+      RazorPayConfigModel? razorPayConfigModel = await AppUpdateRepository.checkRazorPayConfiguration(context: context);
+      if (razorPayConfigModel != null) {
+        if (razorPayConfigModel.data.razorpayStatus == "enable") {
+          PageNavigator.pushPage(
+            context: context,
+            page: PlanDetailScreen(
+              depositType: DepositType.online_deposit,
+              withdrawalDatum: withdrawalDatum,
+              razorPayConfigModel: razorPayConfigModel,
+            ),
+          ).whenComplete(() {
+            onComplete();
+          });
+        } else {
+          showToast(context: context, msg: "Online deposit will be available soon!", isError: true);
+        }
       }
     }
   }

@@ -12,16 +12,16 @@ class WithdrawalBoxView extends StatelessWidget {
       {Key? key,
       required this.data,
       this.isForTransfer = false,
-      required this.onDepositPressed,
-      required this.onWithdrawalPressed,
+      required this.onCapitalWithdrawalPressed,
+      required this.onProfitWithdrawalPressed,
       required this.onTransferPlanPressed})
       : super(key: key);
 
   final WithdrawalDatum data;
   final bool isForTransfer;
   final Function() onTransferPlanPressed;
-  final Function() onDepositPressed;
-  final Function() onWithdrawalPressed;
+  final Function() onCapitalWithdrawalPressed;
+  final Function() onProfitWithdrawalPressed;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -83,14 +83,14 @@ class WithdrawalBoxView extends StatelessWidget {
                     children: [
                       Expanded(
                         child: InkWell(
-                          onTap: onDepositPressed,
+                          onTap: onCapitalWithdrawalPressed,
                           child: Container(
                             height: 40,
                             decoration:
                                 BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(5)),
                             child: const Center(
                               child: SimpleTextView(
-                                data: "Deposit",
+                                data: "CAPITAL WITHDRAWAL",
                                 textColor: AppColors.whiteColor,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -101,7 +101,7 @@ class WithdrawalBoxView extends StatelessWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: InkWell(
-                          onTap: onWithdrawalPressed,
+                          onTap: onProfitWithdrawalPressed,
                           child: Container(
                             height: 40,
                             decoration: BoxDecoration(
@@ -111,7 +111,7 @@ class WithdrawalBoxView extends StatelessWidget {
                             ),
                             child: const Center(
                               child: SimpleTextView(
-                                data: "Withdrawal",
+                                data: "PROFIT WITHDRAWAL",
                                 textColor: AppColors.primaryColor,
                                 fontWeight: FontWeight.w400,
                               ),

@@ -74,13 +74,10 @@ class _SettingScreenState extends State<SettingScreen> {
                           ),
                           const SizedBox(height: 10),
                           SimpleTextView(
-                              data:
-                                  "${profileDataModel!.transactionData!.firstName} ${profileDataModel!.transactionData!.userLastName}",
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500),
+                              data: "${profileDataModel!.data!.userName}", fontSize: 22, fontWeight: FontWeight.w500),
                           const SizedBox(height: 10),
                           SimpleTextView(
-                              data: profileDataModel!.transactionData!.userPhone,
+                              data: profileDataModel!.data!.userPhone ?? "",
                               fontSize: 15,
                               textColor: AppColors.greyColor),
                           const DividerView(topMargin: 20, bottomMargin: 20),
@@ -109,7 +106,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                 await getProfileData();
                               }
                             },
-                          ));
+                          )).whenComplete(() async {
+                        await getProfileData();
+                      });
                     },
                   ),
                   const SizedBox(height: 15),
@@ -136,14 +135,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     isKYC: true,
                     onTap: () async {
                       if (kycStatusModel!.kycStatus == "Rejected" || kycStatusModel!.kycStatus == "") {
-                        PageNavigator.pushPage(
-                            context: context, page:  const KYCScreen(isEditable: true));
+                        PageNavigator.pushPage(context: context, page: const KYCScreen(isEditable: true));
                       } else {
                         PageNavigator.pushPage(
                           context: context,
                           page: KYCStatusScreen(type: kycStatusModel!.kycStatus!),
                         );
-                        
                       }
                     },
                   ),

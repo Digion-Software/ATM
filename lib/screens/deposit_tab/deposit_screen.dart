@@ -54,7 +54,9 @@ class _DepositScreenState extends State<DepositScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: AppColors.primaryColor.withOpacity(0.1),),
+                      border: Border.all(
+                        color: AppColors.primaryColor.withOpacity(0.1),
+                      ),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Column(
@@ -96,7 +98,7 @@ class _DepositScreenState extends State<DepositScreen> {
                                 data: getINRTypeValue(
                                     rupees: double.parse((_dashboardModel!.totalEarning ?? 0).toString()),
                                     decimalDigits: 0),
-                                 valueColor: AppColors.greenColor,
+                                valueColor: AppColors.greenColor,
                               ),
                             ),
                           ],
@@ -109,7 +111,9 @@ class _DepositScreenState extends State<DepositScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.whiteColor,
                       borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: AppColors.primaryColor.withOpacity(0.1),),
+                      border: Border.all(
+                        color: AppColors.primaryColor.withOpacity(0.1),
+                      ),
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                     child: Row(
@@ -132,10 +136,7 @@ class _DepositScreenState extends State<DepositScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
                             child: Row(
                               children: const [
-                                SimpleTextView(
-                                  data: "Withdraw Now",
-                                    textColor: AppColors.textColor
-                                ),
+                                SimpleTextView(data: "Withdraw Now", textColor: AppColors.textColor),
                                 SizedBox(width: 5),
                                 Icon(
                                   Icons.info_outline,
@@ -171,10 +172,7 @@ class _DepositScreenState extends State<DepositScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
                           child: Row(
                             children: const [
-                              SimpleTextView(
-                                  data: "Edit Bank",
-                                  textColor: AppColors.textColor
-                              ),
+                              SimpleTextView(data: "Edit Bank", textColor: AppColors.textColor),
                               SizedBox(width: 5),
                               Icon(
                                 Icons.money,
