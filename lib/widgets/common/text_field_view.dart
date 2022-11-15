@@ -55,6 +55,7 @@ class CommonTextField extends StatelessWidget {
     this.isReadOnly = false,
     this.textAlignment = TextAlign.start,
     this.onTap,
+    this.maxLine,
   }) : super(key: key);
 
   final String title;
@@ -67,6 +68,7 @@ class CommonTextField extends StatelessWidget {
   final bool isReadOnly;
   final TextAlign textAlignment;
   final Function()? onTap;
+  final int? maxLine;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +83,7 @@ class CommonTextField extends StatelessWidget {
           height: 5,
         ),
         Container(
-          height: 55,
+          height: maxLine != null ?null :55,
           width: double.infinity,
           decoration: BoxDecoration(
             color: AppColors.whiteColor,
@@ -103,6 +105,7 @@ class CommonTextField extends StatelessWidget {
                       color: AppColors.blackColor,
                       fontWeight: FontWeight.w400,
                     ),
+                    maxLines: maxLine,
                     onTap: onTap,
                     keyboardType: keyBoardType,
                     obscureText: isObscure,

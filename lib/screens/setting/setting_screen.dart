@@ -1,4 +1,5 @@
 import 'package:atm/config/app_colors.dart';
+import 'package:atm/config/app_constant.dart';
 import 'package:atm/models/kyc/kyc_status_model.dart';
 import 'package:atm/models/profile/profile_data_model.dart';
 import 'package:atm/repository/auth_repository.dart';
@@ -12,6 +13,7 @@ import 'package:atm/screens/profile/edit_profile_screen.dart';
 import 'package:atm/screens/refer_n_earn/refer_n_earn_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/type_strings.dart';
+import 'package:atm/utils/local_storage/shared_preferences.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:atm/widgets/common/button_view.dart';
 import 'package:atm/widgets/common/common_scaffold.dart';
@@ -182,6 +184,13 @@ class _SettingScreenState extends State<SettingScreen> {
   getProfileData() async {
     kycStatusModel = await KYCRepository.getKycStatus(context: context);
     profileDataModel = await ProfileRepository.getProfileData(context: context);
+    if (profileDataModel != null) {
+      if (profileDataModel!.data != null) {
+        if (profileDataModel!.data!.userName != null && profileDataModel!.data!.userName!.isNotEmpty) {
+          LocalStorage.setString(key: AppConstant.userName, value: profileDataModel!.data!.userName ?? "");
+        }
+      }
+    }
     changeState();
   }
 

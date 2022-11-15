@@ -197,9 +197,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
   }
 
   void setUserName() async {
-    LoginModel loginModel = loginModelFromJson(await LocalStorage.getString(key: AppConstant.userDetails) ?? "");
-    if (loginModel.userData != null) {
-      userName = loginModel.userData!.name;
+    String? name = await LocalStorage.getString(key: AppConstant.userName);
+    if(name != null){
+      userName = name;
+    }
+    else{
+      LoginModel loginModel = loginModelFromJson(await LocalStorage.getString(key: AppConstant.userDetails) ?? "");
+      if (loginModel.userData != null) {
+        userName = loginModel.userData!.name;
+      }
     }
     if (mounted) {
       setState(() {});

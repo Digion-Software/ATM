@@ -4,6 +4,7 @@ import 'package:atm/models/withdrawal/get_withdrawal_list_model.dart';
 import 'package:atm/repository/transfer_plan_repository.dart';
 import 'package:atm/repository/withdrawal_repository.dart';
 import 'package:atm/utils/common/loading_view.dart';
+import 'package:atm/utils/common/type_strings.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:atm/widgets/common/button_view.dart';
 import 'package:atm/widgets/common/common_scaffold.dart';
@@ -57,7 +58,12 @@ class _TransferPlanScreenState extends State<TransferPlanScreen> {
                         data: withdrawalListModel!.withdrawalData![index],
                         onTransferPlanPressed: () {
                           internalTransferData(
-                              planId: withdrawalListModel!.withdrawalData![index].planId ?? "", index: index);
+                            planId: withdrawalListModel!.withdrawalData![index].planId ?? "",
+                            maxPlanAmount: ((withdrawalListModel!.withdrawalData![index].invested ?? 0) +
+                                    (withdrawalListModel!.withdrawalData![index].profit ?? 0))
+                                .toString(),
+                            mainPlanName: withdrawalListModel!.withdrawalData![index].planName ?? "",
+                          );
                         },
                         onCapitalWithdrawalPressed: () {},
                         onProfitWithdrawalPressed: () {},
@@ -73,15 +79,25 @@ class _TransferPlanScreenState extends State<TransferPlanScreen> {
     changeState();
   }
 
-  Future<void> internalTransferData({required String planId, required int index}) async {
+  Future<void> internalTransferData({
+    required String planId,
+    required String mainPlanName,
+    required String maxPlanAmount,
+  }) async {
     internalTransferModel = await TransferPlanRepository.internalTransferPlanList(context: context, planId: planId);
-    showOptionForTransferPlan(context: context, index: index, planId: planId);
+    showOptionForTransferPlan(
+      context: context,
+      planId: planId,
+      mainPlanName: mainPlanName,
+      maxPlanAmount: maxPlanAmount,
+    );
   }
 
   void showOptionForTransferPlan({
     required BuildContext context,
-    required int index,
     required String planId,
+    required String mainPlanName,
+    required String maxPlanAmount,
   }) {
     showModalBottomSheet(
       context: context,
@@ -93,7 +109,6 @@ class _TransferPlanScreenState extends State<TransferPlanScreen> {
               const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(20)), color: Colors.white),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -109,7 +124,12 @@ class _TransferPlanScreenState extends State<TransferPlanScreen> {
                   onTap: () {
                     PageNavigator.pop(context: context);
                     showOptionEnterPayment(
-                        context: context, planId: planId, toPlanId: internalTransferModel!.data![index].planId ?? "");
+                        context: context,
+                        planId: planId,
+                        toPlanId: internalTransferModel!.data![index].planId ?? "",
+                        mainPlanName: mainPlanName,
+                        maxPlanAmount: maxPlanAmount,
+                        transferPlanName: internalTransferModel!.data![index].planName ?? "");
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -138,50 +158,80 @@ class _TransferPlanScreenState extends State<TransferPlanScreen> {
     required BuildContext context,
     required String planId,
     required String toPlanId,
+    required String mainPlanName,
+    required String transferPlanName,
+    required String maxPlanAmount,
   }) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      elevation: 10,
       builder: (context) {
-        return Container(
-          decoration:
-              const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(20)), color: Colors.white),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                margin: const EdgeInsets.only(top: 20, bottom: 10),
-                child: const Text(
-                  "Enter amount for transfer plan",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        return Material(
+          color: AppColors.transparentColor,
+          child: Container(
+            decoration:
+                const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(20)), color: Colors.white),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.only(top: 20,bottom: 5),
+                  child: Row(
+                    children: [
+                      const Text(
+                        "Transfer amount: ",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                      ),
+                      Text(
+                        mainPlanName,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600,
+                        color: AppColors.primaryColor),
+                      ),
+                      const Text(
+                        " To ",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                      ),
+                      Text(
+                        transferPlanName,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600,
+                            color: AppColors.primaryColor),
+                      ),
+                    ],
+                  )
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: CommonTextField(
-                  controller: amountController,
-                  hintText: "Enter transfer amount",
-                  iconChild: const SizedBox(),
-                  title: "Enter transfer amount",
-                  isObscure: false,
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.only(bottom: 15),
+                  child: Text(
+                    "$mainPlanName Amount : ${getINRTypeValue(rupees: double.parse(maxPlanAmount))}",
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400,color: AppColors.redColor),
+                  ),
                 ),
-              ),
-              ButtonView(
-                  title: "Transfer plan",
-                  textColor: AppColors.whiteColor,
-                  onTap: () {
-                    PageNavigator.pop(context: context);
-                    TransferPlanRepository.internalTransferPlanOTP(
-                        context: context, planId: planId, toPlanId: toPlanId, amount: amountController.text);
-                  },
-                  topMargin: 10,
-                  leftMargin: 10,
-                  rightMargin: 10,
-                  bottomMargin: 10),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: CommonTextField(
+                    controller: amountController,
+                    hintText: "Enter transfer amount",
+                    iconChild: const SizedBox(),
+                    title: "Enter transfer amount",
+                    isObscure: false,
+                    keyBoardType: TextInputType.number,
+                  ),
+                ),
+                ButtonView(
+                    title: "Transfer plan",
+                    textColor: AppColors.whiteColor,
+                    onTap: () {
+                      PageNavigator.pop(context: context);
+                      TransferPlanRepository.internalTransferPlanOTP(
+                          context: context, planId: planId, toPlanId: toPlanId, amount: amountController.text);
+                    },
+                    topMargin: 10,
+                    leftMargin: 10,
+                    rightMargin: 10,
+                    bottomMargin: 10),
+              ],
+            ),
           ),
         );
       },

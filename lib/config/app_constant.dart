@@ -17,6 +17,7 @@ class AppConstant {
 
   static const String isLoggedIn = "IS-LOGIN";
   static const String userDetails = "USER-DETAILS";
+  static const String userName = "USER-NAME";
   static const String countriesModel = "COUNTRIES-MODEL";
   static const String paymentMethodForDeposit = "PAYMENT-METHOD-FOR-DEPOSIT";
 }

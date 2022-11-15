@@ -4,6 +4,7 @@ import 'package:atm/models/common/api_response.dart';
 import 'package:atm/models/profile/profile_data_model.dart';
 import 'package:atm/models/profile/profile_status_model.dart';
 import 'package:atm/models/simple_model.dart';
+import 'package:atm/repository/auth_repository.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
@@ -49,10 +50,24 @@ class ProfileRepository {
     required Function(bool) isUpdate,
   }) async {
     if (userFirstName.isEmpty) {
-      showToast(context: context, msg: "Enter first name.");
+      showToast(context: context, msg: "Enter first name.",isError: true);
     } else if (userLastName.isEmpty) {
-      showToast(context: context, msg: "Enter last name.");
-    } else {
+      showToast(context: context, msg: "Enter last name.",isError: true);
+    } else if (userEmail.isEmpty) {
+      showToast(context: context, msg: "Enter email address.",isError: true);
+    } else if (!isValidEmail(userEmail)) {
+      showToast(context: context, msg: "Enter valid email address.",isError: true);
+    }
+    else if (userDOB.isEmpty) {
+      showToast(context: context, msg: "Select your date of birth.",isError: true);
+    }
+    else if (userGender.isEmpty) {
+      showToast(context: context, msg: "Select your Gender.",isError: true);
+    }
+    else if (userAddress.isEmpty) {
+      showToast(context: context, msg: "Enter your Address.",isError: true);
+    }
+    else {
       showLoadingDialog(context: context);
       APIResponse apiResponse = await HttpHandler.postMethod(context: context, url: APIEndpoints.profile, data: {
         "is_app": AppConstant.isApp,

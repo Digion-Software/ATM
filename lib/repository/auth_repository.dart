@@ -120,6 +120,13 @@ class AuthRepository {
       LocalStorage.setString(key: AppConstant.token, value: loginModel.userData!.authKey);
       LocalStorage.setString(key: AppConstant.userId, value: loginModel.userData!.userId);
       LocalStorage.setString(key: AppConstant.userDetails, value: loginModelToJson(loginModel));
+      if(loginModel.userData != null){
+        if(loginModel.userData!.name.isNotEmpty)
+        {
+          LocalStorage.setString(key: AppConstant.userName, value: loginModel.userData!.name);
+        }
+      }
+
       LocalStorage.setBool(key: AppConstant.isLoggedIn, value: true);
       PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
       showToast(msg: loginModel.message ?? "--", context: context);
@@ -171,6 +178,12 @@ class AuthRepository {
       LocalStorage.setString(key: AppConstant.token, value: loginModel.userData!.authKey);
       LocalStorage.setString(key: AppConstant.userId, value: loginModel.userData!.userId);
       LocalStorage.setString(key: AppConstant.userDetails, value: loginModelToJson(loginModel));
+      if(loginModel.userData != null){
+        if(loginModel.userData!.name.isNotEmpty)
+        {
+          LocalStorage.setString(key: AppConstant.userName, value: loginModel.userData!.name);
+        }
+      }
       LocalStorage.setBool(key: AppConstant.isLoggedIn, value: true);
       PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
       showToast(msg: loginModel.message ?? "--", context: context);

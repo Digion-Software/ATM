@@ -12,6 +12,7 @@ class EditProfile extends StatefulWidget {
 
   final ProfileDataModel profileDataModel;
   final Function(bool) isUpdated;
+
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
@@ -24,6 +25,8 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController dateOfBirthController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+
+  String? selectedGender;
 
   @override
   void initState() {
@@ -85,12 +88,40 @@ class _EditProfileState extends State<EditProfile> {
                 isReadOnly: true,
               ),
               const SizedBox(height: 20),
-              CommonTextField(
-                title: "Gender",
-                hintText: "Enter Your Gender",
-                controller: genderController,
-                iconChild: const SizedBox(),
-                isObscure: false,
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.whiteColor,
+                  border: Border.all(color: AppColors.primaryColor.withOpacity(0.1), width: 2),
+                ),
+                child: Center(
+                  child: DropdownButton<String>(
+                    value: selectedGender,
+                    focusColor: AppColors.redColor,
+                    underline: Container(),
+                    isExpanded: true,
+                    hint: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('\t\tSelect Your Gender'),
+                    ),
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: ["Male", "Female"].map((e) {
+                      return DropdownMenuItem(
+                        value: e,
+                        child: Text(
+                          "\t\t\t$e",
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedGender = newValue;
+                        genderController.text = newValue!;
+                      });
+                    },
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               CommonTextField(
@@ -99,6 +130,7 @@ class _EditProfileState extends State<EditProfile> {
                 controller: addressController,
                 iconChild: const SizedBox(),
                 isObscure: false,
+                maxLine: 5,
               ),
               const SizedBox(height: 20),
               ButtonView(
@@ -131,6 +163,7 @@ class _EditProfileState extends State<EditProfile> {
     emailController.text = widget.profileDataModel.data!.userEmail ?? "";
     phoneController.text = widget.profileDataModel.data!.userPhone ?? "";
     genderController.text = widget.profileDataModel.data!.gender ?? "";
+    selectedGender = widget.profileDataModel.data!.gender;
     dateOfBirthController.text = widget.profileDataModel.data!.userDob ?? "";
     addressController.text = widget.profileDataModel.data!.userAddress ?? "";
   }

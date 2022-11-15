@@ -179,7 +179,7 @@ class _CustomerSupportChatScreenState extends State<CustomerSupportChatScreen> {
 
   Future<void> selectAttachment() async {
     ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       attachmentPicture = File(image.path);
       showLogs(message: "ATTACHMENT PICTURE :: $attachmentPicture");
