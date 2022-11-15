@@ -23,7 +23,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    _navigatetohome();
+    _navigateToHome();
     super.initState();
   }
 
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  _navigatetohome() async {
+  _navigateToHome() async {
     await Future.delayed(const Duration(seconds: 3), () {});
     AppUpdateModel? appUpdateModel = await AppUpdateRepository.checkAppConfigToUpdate(context: context);
     if (appUpdateModel != null) {

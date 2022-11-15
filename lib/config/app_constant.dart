@@ -15,7 +15,6 @@ class AppConstant {
   static const String deviceState = "DEVICE-STATE";
   static const String deviceCountry = "DEVICE-COUNTRY";
 
-
   static const String isLoggedIn = "IS-LOGIN";
   static const String userDetails = "USER-DETAILS";
   static const String countriesModel = "COUNTRIES-MODEL";
@@ -36,4 +35,5 @@ class APIActions {
   static const String getProfileData = "get_profile_data";
   static const String capitalWithdrawal = "capital_withdrawal";
   static const String profitWithdrawal = "profit_withdrawal";
+  static const String ticketOption = "customer_support_subject";
 }

@@ -132,13 +132,9 @@ class AuthRepository {
 
   static Future validateAndGetLoginOTP({required BuildContext context, required String userPhoneNumber}) async {
     if (userPhoneNumber.isEmpty) {
-      showToast(context: context, msg: 'E-mail Is Required.', isError: true);
-    } else if (!isValidEmail(userPhoneNumber)) {
-      showToast(
-        context: context,
-        msg: 'Enter valid e-mail address.',
-        isError: true,
-      );
+      showToast(context: context, msg: 'Phone number is required.', isError: true);
+    } else if (userPhoneNumber.length < 10) {
+      showToast(context: context, msg: 'Enter valid phone number.', isError: true);
     } else {
       showLoadingDialog(context: context);
       APIResponse response = await HttpHandler.postMethod(

@@ -52,11 +52,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 30),
                   CommonTextField(
-                    title: "Email",
-                    hintText: "Enter email",
+                    title: "Phone",
+                    hintText: "Enter phone number",
                     controller: phoneNumberController,
                     iconChild: const SizedBox(),
                     isObscure: false,
+                    keyBoardType: TextInputType.phone,
                   ),
                   // const SizedBox(height: 20),
                   // CommonTextField(
@@ -92,11 +93,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           PageNavigator.pushPage(context: context, page: const SignUpScreen());
                         },
                         child: const SimpleTextView(
-                          data: "Sign Up",
-                          textColor: AppColors.primaryColor,
-                          fontWeight: FontWeight.w600,
-                            fontSize: 16
-                        ),
+                            data: "Sign Up",
+                            textColor: AppColors.primaryColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16),
                       ),
                     ],
                   ),

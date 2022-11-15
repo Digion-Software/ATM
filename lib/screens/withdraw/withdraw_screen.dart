@@ -53,6 +53,7 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                       padding: const EdgeInsets.only(bottom: 15),
                       child: WithdrawalBoxView(
                         data: withdrawalListModel!.withdrawalData![index],
+                        onTransferPlanPressed: () {},
                         onDepositPressed: () {
                           showOptionForDeposit(
                               context: context,
@@ -63,13 +64,13 @@ class _WithdrawScreenState extends State<WithdrawScreen> {
                         },
                         onWithdrawalPressed: () {
                           showOptionForWithdraw(
-                              index: index,
-                              context: context,
-                              withdrawalDatum: withdrawalListModel!.withdrawalData![index],
-                              capitalAmount:
-                                  double.parse((withdrawalListModel!.withdrawalData![index].invested ?? 0).toString()),
+                            index: index,
+                            context: context,
+                            withdrawalDatum: withdrawalListModel!.withdrawalData![index],
+                            capitalAmount:
+                                double.parse((withdrawalListModel!.withdrawalData![index].invested ?? 0).toString()),
                             profitAmount:
-                            double.parse((withdrawalListModel!.withdrawalData![index].profit ?? 0).toString()),
+                                double.parse((withdrawalListModel!.withdrawalData![index].profit ?? 0).toString()),
                           );
                         },
                       ),

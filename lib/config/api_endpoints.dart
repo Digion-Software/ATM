@@ -49,4 +49,7 @@ class APIEndpoints {
   ///FAQ AND SUPPORT
   static const String faq = "faq_details.php";
   static const String ticketList = "ticket_list.php";
+  static const String ticketOption = "common_api.php";
+  static const String createTicket = "customer_support.php";
+  static const String viewTicketChat = "view_ticket.php";
 }

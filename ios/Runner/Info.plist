@@ -47,5 +47,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need your camera permission for kyc and ticket picture.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Need your camera permission for kyc and ticket picture.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need your camera permission for kyc and ticket picture.</string>
 </dict>
 </plist>
