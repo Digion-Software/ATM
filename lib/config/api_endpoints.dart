@@ -6,9 +6,11 @@ class APIEndpoints {
   static const String hostUrl1 = "ajaxfiles/";
   static const String hostUrl2 = "datatable/";
 
+
   ///APP UPDATE
   static const String appUpdate = "app_config.php";
   static const String razorPayConfig = "razorpay_config.php";
+  static const String termsAndCondition = "http://anytimemoney.cash/terms-conditions.html";
 
   ///AUTHENTICATION
   static const String createUser = "create_user.php";
@@ -57,4 +59,5 @@ class APIEndpoints {
 
   ///TRANSFER PLAN
   static const String internalTransfer = "internal_transfer.php";
+
 }

@@ -7,6 +7,7 @@ import 'package:atm/repository/kyc_repository.dart';
 import 'package:atm/repository/profile_repository.dart';
 import 'package:atm/screens/bank/bank_account_screen.dart';
 import 'package:atm/screens/help_and_support/help_and_support_screen.dart';
+import 'package:atm/screens/help_and_support/terms_and_conditions_screen.dart';
 import 'package:atm/screens/kyc/kyc_screen.dart';
 import 'package:atm/screens/kyc/kyc_status_screen.dart';
 import 'package:atm/screens/profile/edit_profile_screen.dart';
@@ -158,7 +159,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   SettingBoxView(
                     title: "Terms and Conditions",
                     icon: Icons.contact_page_sharp,
-                    onTap: () {},
+                    onTap: () {
+                      PageNavigator.pushPage(context: context, page: const TermsAndConditionsScreen());
+                    },
                   ),
                   const SizedBox(height: 15),
                   SettingBoxView(

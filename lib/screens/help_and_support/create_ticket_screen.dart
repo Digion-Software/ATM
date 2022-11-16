@@ -60,7 +60,7 @@ class _CreateTicketScreenState extends State<CreateTicketScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Select Option",
+                  "Select Category",
                   style: AppTextStyle.descriptionTextStyle
                       .copyWith(color: AppColors.blackColor.withOpacity(0.5), fontSize: 16),
                 ),
@@ -83,7 +83,7 @@ class _CreateTicketScreenState extends State<CreateTicketScreen> {
                       : DropdownButton(
                           value: optionValue,
                           isExpanded: true,
-                          hint: Text("\t\t\tSelect Your Country",
+                          hint: Text("\t\t\tSelect Category",
                               style: AppTextStyle.simpleTextStyle.copyWith(
                                 fontSize: 16,
                                 color: AppColors.blackColor,

@@ -4,6 +4,7 @@ import 'package:atm/models/authentication/login_model.dart';
 import 'package:atm/repository/auth_repository.dart';
 import 'package:atm/screens/help_and_support/customer_support_screen.dart';
 import 'package:atm/screens/help_and_support/help_and_support_screen.dart';
+import 'package:atm/screens/help_and_support/terms_and_conditions_screen.dart';
 import 'package:atm/screens/refer_n_earn/refer_n_earn_screen.dart';
 import 'package:atm/screens/setting/setting_screen.dart';
 import 'package:atm/screens/transfer_plan/transfer_plan_screen.dart';
@@ -68,127 +69,131 @@ class _DrawerScreenState extends State<DrawerScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Column(
-              children: [
-                ListTile(
-                  onTap: () {
-                    PageNavigator.pop(context: context);
-                    widget.onHomePressed();
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.home,
-                    color: AppColors.greyColor,
-                  ),
-                  title: DescriptionTextView(data: "Home", fontWeight: FontWeight.w500, fontSize: 16,
-                  textColor: AppColors.blackColor.withOpacity(0.7)),
-                ),
-                ListTile(
-                  onTap: () {
-                    PageNavigator.pop(context: context);
-                    widget.onTransactionPressed();
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.event_note,
-                    color: AppColors.greyColor,
-                  ),
-                  title: DescriptionTextView(data: "Transactions", fontWeight: FontWeight.w500, fontSize: 16,
-                      textColor: AppColors.blackColor.withOpacity(0.7)
-                )),
-                ListTile(
-                  onTap: () {
-                    PageNavigator.pop(context: context);
-                    PageNavigator.pushPage(context: context, page: const ReferNEarnScreen());
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.card_giftcard,
-                    color: AppColors.greyColor,
-                  ),
-                  title: DescriptionTextView(data: "Refer n Earn", fontWeight: FontWeight.w500, fontSize: 16,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  children: [
+                    ListTile(
+                      onTap: () {
+                        PageNavigator.pop(context: context);
+                        widget.onHomePressed();
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.home,
+                        color: AppColors.greyColor,
+                      ),
+                      title: DescriptionTextView(data: "Home", fontWeight: FontWeight.w500, fontSize: 16,
                       textColor: AppColors.blackColor.withOpacity(0.7)),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        PageNavigator.pop(context: context);
+                        widget.onTransactionPressed();
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.event_note,
+                        color: AppColors.greyColor,
+                      ),
+                      title: DescriptionTextView(data: "Transactions", fontWeight: FontWeight.w500, fontSize: 16,
+                          textColor: AppColors.blackColor.withOpacity(0.7)
+                    )),
+                    ListTile(
+                      onTap: () {
+                        PageNavigator.pop(context: context);
+                        PageNavigator.pushPage(context: context, page: const ReferNEarnScreen());
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.card_giftcard,
+                        color: AppColors.greyColor,
+                      ),
+                      title: DescriptionTextView(data: "Refer n Earn", fontWeight: FontWeight.w500, fontSize: 16,
+                          textColor: AppColors.blackColor.withOpacity(0.7)),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        PageNavigator.pop(context: context);
+                        PageNavigator.pushPage(context: context, page: const WithdrawScreen());
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.account_balance_wallet,
+                        color: AppColors.greyColor,
+                      ),
+                      title: DescriptionTextView(data: "Withdraw Profit", fontWeight: FontWeight.w500, fontSize: 16,
+                          textColor: AppColors.blackColor.withOpacity(0.7)),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        PageNavigator.pop(context: context);
+                        PageNavigator.pushPage(context: context, page: const TransferPlanScreen());
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.change_circle_outlined,
+                        color: AppColors.greyColor,
+                      ),
+                      title: DescriptionTextView(data: "Transfer Plan",fontWeight: FontWeight.w500, fontSize: 16,
+                          textColor: AppColors.blackColor.withOpacity(0.7)),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        PageNavigator.pop(context: context);
+                        PageNavigator.pushPage(context: context, page: const HelpAndSupportScreen());
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.help,
+                        color: AppColors.greyColor,
+                      ),
+                      title: DescriptionTextView(data: "Help & Support", fontWeight: FontWeight.w500, fontSize: 16,
+                          textColor: AppColors.blackColor.withOpacity(0.7)),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        PageNavigator.pop(context: context);
+                        PageNavigator.pushPage(context: context, page: const SettingScreen());
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.settings,
+                        color: AppColors.greyColor,
+                      ),
+                      title: DescriptionTextView(data: "Settings",fontWeight: FontWeight.w500, fontSize: 16,
+                          textColor: AppColors.blackColor.withOpacity(0.7)),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        PageNavigator.pop(context: context);
+                        PageNavigator.pushPage(context: context, page: const CustomerSupportScreen());
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.support_agent_rounded,
+                        color: AppColors.greyColor,
+                      ),
+                      title: DescriptionTextView(data: "Customer Support",fontWeight: FontWeight.w500, fontSize: 16,
+                          textColor: AppColors.blackColor.withOpacity(0.7)),
+                    ),
+                    ListTile(
+                      onTap: () async {
+                        AuthRepository.logout(context);
+                      },
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(
+                        Icons.power_settings_new,
+                        color: AppColors.greyColor,
+                      ),
+                      title: DescriptionTextView(data: "Logout", fontWeight: FontWeight.w500, fontSize: 16,
+                          textColor: AppColors.blackColor.withOpacity(0.7)),
+                    ),
+                  ],
                 ),
-                ListTile(
-                  onTap: () {
-                    PageNavigator.pop(context: context);
-                    PageNavigator.pushPage(context: context, page: const WithdrawScreen());
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.account_balance_wallet,
-                    color: AppColors.greyColor,
-                  ),
-                  title: DescriptionTextView(data: "Withdraw Profit", fontWeight: FontWeight.w500, fontSize: 16,
-                      textColor: AppColors.blackColor.withOpacity(0.7)),
-                ),
-                ListTile(
-                  onTap: () {
-                    PageNavigator.pop(context: context);
-                    PageNavigator.pushPage(context: context, page: const TransferPlanScreen());
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.change_circle_outlined,
-                    color: AppColors.greyColor,
-                  ),
-                  title: DescriptionTextView(data: "Transfer Plan",fontWeight: FontWeight.w500, fontSize: 16,
-                      textColor: AppColors.blackColor.withOpacity(0.7)),
-                ),
-                ListTile(
-                  onTap: () {
-                    PageNavigator.pop(context: context);
-                    PageNavigator.pushPage(context: context, page: const HelpAndSupportScreen());
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.help,
-                    color: AppColors.greyColor,
-                  ),
-                  title: DescriptionTextView(data: "Help & Support", fontWeight: FontWeight.w500, fontSize: 16,
-                      textColor: AppColors.blackColor.withOpacity(0.7)),
-                ),
-                ListTile(
-                  onTap: () {
-                    PageNavigator.pop(context: context);
-                    PageNavigator.pushPage(context: context, page: const SettingScreen());
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.settings,
-                    color: AppColors.greyColor,
-                  ),
-                  title: DescriptionTextView(data: "Settings",fontWeight: FontWeight.w500, fontSize: 16,
-                      textColor: AppColors.blackColor.withOpacity(0.7)),
-                ),
-                ListTile(
-                  onTap: () {
-                    PageNavigator.pop(context: context);
-                    PageNavigator.pushPage(context: context, page: const CustomerSupportScreen());
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.support_agent_rounded,
-                    color: AppColors.greyColor,
-                  ),
-                  title: DescriptionTextView(data: "Customer Support",fontWeight: FontWeight.w500, fontSize: 16,
-                      textColor: AppColors.blackColor.withOpacity(0.7)),
-                ),
-                ListTile(
-                  onTap: () async {
-                    AuthRepository.logout(context);
-                  },
-                  contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.power_settings_new,
-                    color: AppColors.greyColor,
-                  ),
-                  title: DescriptionTextView(data: "Logout", fontWeight: FontWeight.w500, fontSize: 16,
-                      textColor: AppColors.blackColor.withOpacity(0.7)),
-                ),
-              ],
+              ),
             ),
           ),
         ],
