@@ -15,43 +15,12 @@ import 'package:atm/utils/networking/http_handler.dart';
 import 'package:flutter/material.dart';
 
 class AuthRepository {
-  // static Future createUser(
-  //     {required BuildContext context,
-  //     required String userFirstName,
-  //     required String userLastName,
-  //     required String userEmailAddress,
-  //     required String userPhone}) async {
-  //   showLoadingDialog(context: context);
-  //   APIResponse response = await HttpHandler.postMethod(url: APIEndpoints.createUser, data: {
-  //     "user_first_name": userFirstName,
-  //     "user_last_name": userLastName,
-  //     "user_email_address": userEmailAddress,
-  //     "user_phone": userPhone,
-  //   });
-  //   if (response.isSuccess) {
-  //     hideLoadingDialog(context: context);
-  //     CreateUserModel createUserModel = createUserModelFromJson(response.data);
-  //     showToast(
-  //       msg: createUserModel.message!,
-  //       color: Colors.green,
-  //       context: context,
-  //     );
-  //     PageNavigator.pushAndRemoveUntilPage(context: context, page: const Login_page());
-  //   } else {
-  //     hideLoadingDialog(context: context);
-  //     CreateUserModel createUserModel = createUserModelFromJson(response.data);
-  //     showToast(
-  //       msg: createUserModel.message!,
-  //       color: Colors.red,
-  //       context: context,
-  //     );
-  //   }
-  // }
 
   static Future validateAndGetOTPForNewRegister({
     required BuildContext context,
     required String? userCountry,
     required String userPhone,
+    bool isNeedNavigation = true,
   }) async {
     if (userCountry == null || userCountry.isEmpty) {
       showToast(context: context, msg: "Select your country.", isError: true);
@@ -70,13 +39,15 @@ class AuthRepository {
       if (response.isSuccess) {
         hideLoadingDialog(context: context);
         SimpleModel simpleModel = simpleModelFromJson(response.data);
-        PageNavigator.pushPage(
-            context: context,
-            page: VerifyLoginScreen(
-              phoneNumber: userPhone,
-              userCountry: userCountry,
-              isForLogin: false,
-            ));
+        if(isNeedNavigation) {
+          PageNavigator.pushPage(
+              context: context,
+              page: VerifyLoginScreen(
+                phoneNumber: userPhone,
+                userCountry: userCountry,
+                isForLogin: false,
+              ));
+        }
         showToast(context: context, msg: simpleModel.message, isError: true);
       } else {
         hideLoadingDialog(context: context);
@@ -137,7 +108,8 @@ class AuthRepository {
     }
   }
 
-  static Future validateAndGetLoginOTP({required BuildContext context, required String userPhoneNumber}) async {
+  static Future validateAndGetLoginOTP({required BuildContext context, required String userPhoneNumber,
+  bool isNeedNavigation = true}) async {
     if (userPhoneNumber.isEmpty) {
       showToast(context: context, msg: 'Phone number is required.', isError: true);
     } else if (userPhoneNumber.length < 10) {
@@ -151,12 +123,14 @@ class AuthRepository {
       if (response.isSuccess) {
         hideLoadingDialog(context: context);
         SimpleModel simpleModel = simpleModelFromJson(response.data);
-        PageNavigator.pushPage(
-            context: context,
-            page: VerifyLoginScreen(
-              isForLogin: true,
-              phoneNumber: userPhoneNumber,
-            ));
+        if(isNeedNavigation) {
+          PageNavigator.pushPage(
+              context: context,
+              page: VerifyLoginScreen(
+                isForLogin: true,
+                phoneNumber: userPhoneNumber,
+              ));
+        }
         showToast(msg: simpleModel.message, context: context);
       } else {
         hideLoadingDialog(context: context);

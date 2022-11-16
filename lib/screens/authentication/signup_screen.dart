@@ -96,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 return DropdownMenuItem(
                                   value: e.nicename.toString(),
                                   child: Text(
-                                    "\t\t\t${e.nicename}",
+                                    "\t\t\t+${e.phonecode} ${e.nicename}",
                                     style: const TextStyle(color: Colors.black),
                                   ),
                                 );
@@ -106,7 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     (e) => Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        "\t\t\t${e.nicename}",
+                                          "\t\t\t+${e.phonecode} ${e.nicename}",
                                         style: const TextStyle(color: Colors.black),
                                       ),
                                     ),

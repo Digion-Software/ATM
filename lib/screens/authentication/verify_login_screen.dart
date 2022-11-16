@@ -105,6 +105,9 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
           ),
           Center(
             child: Countdown(
+              isForLogin: widget.isForLogin,
+              userCountry: widget.userCountry,
+              userPhone: widget.phoneNumber,
               animation: StepTween(
                 begin: levelClock, // THIS IS A USER ENTERED NUMBER
                 end: 0,
@@ -145,15 +148,38 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
 
 // ignore: must_be_immutable
 class Countdown extends AnimatedWidget {
-  Countdown({Key? key, required this.animation}) : super(key: key, listenable: animation);
+  Countdown({Key? key, required this.animation,required this.isForLogin,
+  this.userCountry,
+  this.userPhone}) : super(key: key, listenable: animation);
   Animation<int> animation;
-
+  final bool isForLogin;
+  final String? userCountry;
+  final String? userPhone;
   @override
   build(BuildContext context) {
     Duration clockTimer = Duration(seconds: animation.value);
     String timerText =
         '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
-    return Text(
+
+    return timerText == "0:00" ?
+        InkWell(
+          onTap: (){
+            if(isForLogin){
+              AuthRepository.validateAndGetLoginOTP(context: context, userPhoneNumber: userPhone??"",isNeedNavigation: false);
+            }
+            else {
+              AuthRepository.validateAndGetOTPForNewRegister(context: context,
+              userCountry: userCountry,
+              userPhone: userPhone??"",
+              isNeedNavigation: false);
+            }
+          },
+          child: Text(
+            "Resend OTP",
+            style: AppTextStyle.simpleTextStyle.copyWith(fontSize: 18, fontWeight: FontWeight.w600,color: AppColors.primaryColor),
+          ),
+        )
+        :Text(
       timerText,
       style: AppTextStyle.simpleTextStyle.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
     );

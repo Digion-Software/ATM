@@ -1,8 +1,8 @@
 class APIEndpoints {
   APIEndpoints._();
 
-  // static const String baseUrl = "http://anytimemoney.cash/";
-  static const String baseUrl = "https://atm.alphapixclients.com/";
+  static const String baseUrl = "http://anytimemoney.cash/";
+  // static const String baseUrl = "https://atm.alphapixclients.com/";
   static const String hostUrl1 = "ajaxfiles/";
   static const String hostUrl2 = "datatable/";
 
