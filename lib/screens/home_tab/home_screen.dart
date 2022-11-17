@@ -249,26 +249,31 @@ void showOptionForDeposit(
     PageNavigator.pushPage(
         context: context,
         page: EditProfile(
-            profileDataModel: ProfileDataModel(
-                status: null,
-                totalCapital: null,
-                data: ProfileDatum(
-                  userId: await LocalStorage.getString(key: AppConstant.userId) ?? "",
-                  userFirstName: profileStatusModel.userFirstName!,
-                  userEmail: profileStatusModel.userEmail!,
-                  userLastName: profileStatusModel.userEmail!,
-                  userPhone: profileStatusModel.userPhone!,
-                  userName: profileStatusModel.userPhone!,
-                  userCountry: profileStatusModel.userCountry!,
-                  mobileCode: null,
-                  userDob: profileStatusModel.userDob!,
-                  gender: profileStatusModel.gender!,
-                  userAddress: profileStatusModel.userAddress!,
-                  walletCode: profileStatusModel.walletCode!,
-                  profileStatus: null,
-                  kycStatus: null,
-                )),
-            isUpdated: (v) {}));
+          profileDataModel: ProfileDataModel(
+              status: null,
+              totalCapital: null,
+              data: ProfileDatum(
+                userId: await LocalStorage.getString(key: AppConstant.userId) ?? "",
+                userFirstName: profileStatusModel.userFirstName!,
+                userEmail: profileStatusModel.userEmail!,
+                userLastName: profileStatusModel.userEmail!,
+                userPhone: profileStatusModel.userPhone!,
+                userName: profileStatusModel.userPhone!,
+                userCountry: profileStatusModel.userCountry!,
+                mobileCode: null,
+                userDob: profileStatusModel.userDob!,
+                gender: profileStatusModel.gender!,
+                userAddress: profileStatusModel.userAddress!,
+                walletCode: profileStatusModel.walletCode!,
+                profileStatus: null,
+                kycStatus: null,
+              )),
+          isUpdated: (v) async {
+            if (v) {
+              PageNavigator.pop(context: context);
+            }
+          },
+        ));
   } else {
     String paymentMethodForDeposit = await LocalStorage.getString(key: AppConstant.paymentMethodForDeposit) ?? "";
     if (paymentMethodForDeposit.toLowerCase() == "both") {

@@ -11,6 +11,7 @@ class APIEndpoints {
   static const String appUpdate = "app_config.php";
   static const String razorPayConfig = "razorpay_config.php";
   static const String termsAndCondition = "http://anytimemoney.cash/terms-conditions.html";
+  static const String aboutUs = "http://anytimemoney.cash/about-us.html";
 
   ///AUTHENTICATION
   static const String createUser = "create_user.php";

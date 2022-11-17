@@ -163,7 +163,9 @@ class _EditProfileState extends State<EditProfile> {
     emailController.text = widget.profileDataModel.data!.userEmail ?? "";
     phoneController.text = widget.profileDataModel.data!.userPhone ?? "";
     genderController.text = widget.profileDataModel.data!.gender ?? "";
-    selectedGender = widget.profileDataModel.data!.gender;
+    if(widget.profileDataModel.data!.gender != null && widget.profileDataModel.data!.gender != "") {
+      selectedGender = widget.profileDataModel.data!.gender;
+    }
     dateOfBirthController.text = widget.profileDataModel.data!.userDob ?? "";
     addressController.text = widget.profileDataModel.data!.userAddress ?? "";
   }

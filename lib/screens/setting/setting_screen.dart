@@ -6,6 +6,7 @@ import 'package:atm/repository/auth_repository.dart';
 import 'package:atm/repository/kyc_repository.dart';
 import 'package:atm/repository/profile_repository.dart';
 import 'package:atm/screens/bank/bank_account_screen.dart';
+import 'package:atm/screens/help_and_support/about_us_screen.dart';
 import 'package:atm/screens/help_and_support/help_and_support_screen.dart';
 import 'package:atm/screens/help_and_support/terms_and_conditions_screen.dart';
 import 'package:atm/screens/kyc/kyc_screen.dart';
@@ -167,7 +168,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   SettingBoxView(
                     title: "About",
                     icon: Icons.info,
-                    onTap: () {},
+                    onTap: () {
+                      PageNavigator.pushPage(context: context, page: const AboutUsScreen());
+                    },
                   ),
                   const SizedBox(height: 20),
                   ButtonView(
