@@ -35,11 +35,11 @@ class RazorpayPayment {
   }
 
   static Map<String, dynamic> paymentRequestOptions = {
-    'key': 'rzp_test_cqWTKfyMXLgv8U',
-    'amount': 50000,
-    'name': 'Test',
-    'description': 'Test',
-    'prefill': {'contact': '9999999999', 'email': 'test@gmail.com'}
+    'key': 'rzp_live_lvmlrllsCqpU4m',
+    'amount': 100,
+    'name': 'ATM',
+    'description': 'Plan',
+    'prefill': {'contact': '', 'email': ''}
   };
 
   static openRazorpayPayment() {

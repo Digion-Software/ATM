@@ -330,6 +330,7 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
                       amount: amountController.text.replaceAll("₹", ""),
                       planId: widget.withdrawalDatum!.planId ?? "1",
                       razorPayKey: widget.razorPayConfigModel.data.razorpayData.key,
+                      razorPayConfigModel: widget.razorPayConfigModel
                     );
                   } else {
                     showToast(context: context, msg: "Please enter correct amount!", isError: true);

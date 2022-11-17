@@ -9,7 +9,7 @@ class AppUpdateRepository {
   static Future<AppUpdateModel?> checkAppConfigToUpdate({
     required BuildContext context,
   }) async {
-    APIResponse response = await HttpHandler.getMethod(url: APIEndpoints.appUpdate);
+    APIResponse response = await HttpHandler.getMethod(url: APIEndpoints.appConfig);
     if (response.isSuccess) {
       AppUpdateModel appUpdateModel = appUpdateModelFromJson(response.data);
       return appUpdateModel;

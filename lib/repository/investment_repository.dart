@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:atm/config/api_endpoints.dart';
 import 'package:atm/config/app_constant.dart';
+import 'package:atm/models/app_update/razorpay_config_model.dart';
+import 'package:atm/models/authentication/login_model.dart';
 import 'package:atm/models/common/api_response.dart';
 import 'package:atm/models/investment_manage/investment_manage_model.dart';
 import 'package:atm/repository/payment_repository.dart';
@@ -52,6 +54,7 @@ class InvestRepository {
     required String amount,
     required String planId,
     required String razorPayKey,
+    required RazorPayConfigModel razorPayConfigModel,
   }) async {
     showLoadingDialog(context: context);
     APIResponse apiResponse = await HttpHandler.postMethod(context: context, url: APIEndpoints.investmentManage, data: {
@@ -68,6 +71,22 @@ class InvestRepository {
       InvestmentManageModel investmentManageModel = investmentManageModelFromJson(apiResponse.data);
       RazorpayPayment.paymentRequestOptions['key'] = razorPayKey;
       RazorpayPayment.paymentRequestOptions['amount'] = (int.parse(amount) * 100).toString();
+      RazorpayPayment.paymentRequestOptions['name'] = razorPayConfigModel.data.razorpayData.name;
+      RazorpayPayment.paymentRequestOptions['description'] = razorPayConfigModel.data.razorpayData.description;
+      if(await LocalStorage.getString(key: AppConstant.userDetails) != null)
+      {
+        LoginModel loginModel = loginModelFromJson(await LocalStorage.getString(key: AppConstant.userDetails) ?? "");
+        if(loginModel.userData != null) {
+          RazorpayPayment.paymentRequestOptions['prefill']["contact"] = loginModel.userData!.userPhone;
+          if(loginModel.userData!.email.isNotEmpty) {
+            RazorpayPayment.paymentRequestOptions['prefill']["email"] = loginModel.userData!.email;
+          }
+          else{
+            RazorpayPayment.paymentRequestOptions['prefill']["email"] = "ATM";
+          }
+        }
+      }
+
       RazorpayPayment.addRazorpayListeners(
         onSuccessHandel: (PaymentSuccessResponse response) async {
           await PaymentRepository.paymentSuccess(context: context, investmentId: investmentManageModel.investmentId!);

@@ -186,7 +186,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
               onTap: () async {
                 if (amountController.text.isEmpty || amountController.text == "₹") {
                   showToast(
-                      context: context, msg: "Please enter or select at least minimum amount of plan.", isError: true);
+                      context: context, msg: "Please enter amount. Amount can not be greater then your balance.", isError: true);
                 } else if (amountController.text.contains(".") || amountController.text.contains("-")) {
                   showToast(context: context, msg: "Please enter valid amount", isError: true);
                 } else if (widget.withdrawalTo == "upi" && upiIdController.text.isEmpty) {

@@ -16,6 +16,7 @@ class AppConstant {
   static const String deviceCountry = "DEVICE-COUNTRY";
 
   static const String isLoggedIn = "IS-LOGIN";
+  static const String isIntroShow = "IS-INTO-SHOW";
   static const String userDetails = "USER-DETAILS";
   static const String userName = "USER-NAME";
   static const String countriesModel = "COUNTRIES-MODEL";

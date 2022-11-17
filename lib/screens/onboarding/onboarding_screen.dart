@@ -1,7 +1,9 @@
 import 'package:atm/config/app_colors.dart';
+import 'package:atm/config/app_constant.dart';
 import 'package:atm/config/app_images.dart';
 import 'package:atm/config/app_text_style.dart';
 import 'package:atm/screens/dashboard/dashboard_screen.dart';
+import 'package:atm/utils/local_storage/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboarding_screen/OnbordingData.dart';
 
@@ -20,22 +22,22 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     OnbordingData(
       imagePath: AppImages.introOne,
       title: "Save and Invest",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. ",
+      desc: "Save and invest money on a single platform and earn daily basis.",
     ),
     OnbordingData(
       imagePath: AppImages.introTwo,
       title: "Grow Money",
-      desc: "Sit back and watch your money grow Money goes into Diamond business and other statups",
+      desc: "Sit back and watch your money grow. Money goes into multi-diversified investment portfolios and small start-ups.",
     ),
     OnbordingData(
       imagePath: AppImages.introThree,
-      title: "Earn Day to Day basis",
-      desc: "Earn Day to Day basis and Get rewards instantly",
+      title: "Earn Daily Basis",
+      desc: "Through algorithmic smart investing, earn your share every day. From Monday TO Friday.",
     ),
     OnbordingData(
       imagePath: AppImages.introFour,
       title: "Withdraw",
-      desc: "Withdraw into your back account",
+      desc: "Withdraw your share directly into your bank account.",
     ),
   ];
 
@@ -65,6 +67,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             right: 20,
             child: InkWell(
               onTap: () {
+                LocalStorage.setBool(key: AppConstant.isIntroShow, value: false);
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
@@ -120,6 +123,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             child: InkWell(
               onTap: () {
                 if (currentIndex == 3) {
+                  LocalStorage.setBool(key: AppConstant.isIntroShow, value: false);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(

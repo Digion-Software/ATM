@@ -8,7 +8,7 @@ class APIEndpoints {
 
 
   ///APP UPDATE
-  static const String appUpdate = "app_config.php";
+  static const String appConfig = "app_config.php";
   static const String razorPayConfig = "razorpay_config.php";
   static const String termsAndCondition = "http://anytimemoney.cash/terms-conditions.html";
   static const String aboutUs = "http://anytimemoney.cash/about-us.html";

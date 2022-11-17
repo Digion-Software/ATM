@@ -6,7 +6,7 @@ import 'package:atm/models/common/api_response.dart';
 import 'package:atm/models/simple_model.dart';
 import 'package:atm/screens/authentication/login_screen.dart';
 import 'package:atm/screens/authentication/verify_login_screen.dart';
-import 'package:atm/screens/dashboard/dashboard_screen.dart';
+import 'package:atm/screens/onboarding/onboarding_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
@@ -15,7 +15,6 @@ import 'package:atm/utils/networking/http_handler.dart';
 import 'package:flutter/material.dart';
 
 class AuthRepository {
-
   static Future validateAndGetOTPForNewRegister({
     required BuildContext context,
     required String? userCountry,
@@ -39,7 +38,7 @@ class AuthRepository {
       if (response.isSuccess) {
         hideLoadingDialog(context: context);
         SimpleModel simpleModel = simpleModelFromJson(response.data);
-        if(isNeedNavigation) {
+        if (isNeedNavigation) {
           PageNavigator.pushPage(
               context: context,
               page: VerifyLoginScreen(
@@ -91,15 +90,15 @@ class AuthRepository {
       LocalStorage.setString(key: AppConstant.token, value: loginModel.userData!.authKey);
       LocalStorage.setString(key: AppConstant.userId, value: loginModel.userData!.userId);
       LocalStorage.setString(key: AppConstant.userDetails, value: loginModelToJson(loginModel));
-      if(loginModel.userData != null){
-        if(loginModel.userData!.name.isNotEmpty)
-        {
+      if (loginModel.userData != null) {
+        if (loginModel.userData!.name.isNotEmpty) {
           LocalStorage.setString(key: AppConstant.userName, value: loginModel.userData!.name);
         }
       }
 
       LocalStorage.setBool(key: AppConstant.isLoggedIn, value: true);
-      PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+      LocalStorage.setBool(key: AppConstant.isIntroShow, value: true);
+      PageNavigator.pushAndRemoveUntilPage(context: context, page: const OnBoardingScreen());
       showToast(msg: loginModel.message ?? "--", context: context);
     } else {
       hideLoadingDialog(context: context);
@@ -108,8 +107,8 @@ class AuthRepository {
     }
   }
 
-  static Future validateAndGetLoginOTP({required BuildContext context, required String userPhoneNumber,
-  bool isNeedNavigation = true}) async {
+  static Future validateAndGetLoginOTP(
+      {required BuildContext context, required String userPhoneNumber, bool isNeedNavigation = true}) async {
     if (userPhoneNumber.isEmpty) {
       showToast(context: context, msg: 'Phone number is required.', isError: true);
     } else if (userPhoneNumber.length < 10) {
@@ -123,7 +122,7 @@ class AuthRepository {
       if (response.isSuccess) {
         hideLoadingDialog(context: context);
         SimpleModel simpleModel = simpleModelFromJson(response.data);
-        if(isNeedNavigation) {
+        if (isNeedNavigation) {
           PageNavigator.pushPage(
               context: context,
               page: VerifyLoginScreen(
@@ -152,14 +151,14 @@ class AuthRepository {
       LocalStorage.setString(key: AppConstant.token, value: loginModel.userData!.authKey);
       LocalStorage.setString(key: AppConstant.userId, value: loginModel.userData!.userId);
       LocalStorage.setString(key: AppConstant.userDetails, value: loginModelToJson(loginModel));
-      if(loginModel.userData != null){
-        if(loginModel.userData!.name.isNotEmpty)
-        {
+      if (loginModel.userData != null) {
+        if (loginModel.userData!.name.isNotEmpty) {
           LocalStorage.setString(key: AppConstant.userName, value: loginModel.userData!.name);
         }
       }
       LocalStorage.setBool(key: AppConstant.isLoggedIn, value: true);
-      PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+      LocalStorage.setBool(key: AppConstant.isIntroShow, value: true);
+      PageNavigator.pushAndRemoveUntilPage(context: context, page: const OnBoardingScreen());
       showToast(msg: loginModel.message ?? "--", context: context);
     } else {
       hideLoadingDialog(context: context);

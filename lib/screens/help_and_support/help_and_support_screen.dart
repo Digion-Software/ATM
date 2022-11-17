@@ -73,6 +73,7 @@ class _HelpAndSupportScreenState extends State<HelpAndSupportScreen> {
       },
       children: _steps.map<ExpansionPanel>((Step step) {
         return ExpansionPanel(
+          canTapOnHeader: true,
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
               contentPadding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 5),
