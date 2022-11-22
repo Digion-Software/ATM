@@ -16,9 +16,11 @@ class VerifyLoginScreen extends StatefulWidget {
     required this.phoneNumber,
     required this.isForLogin,
     this.userCountry,
+    this.referralCode,
   }) : super(key: key);
 
   final String? userCountry;
+  final String? referralCode;
   final String phoneNumber;
   final bool isForLogin;
 
@@ -108,6 +110,7 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
               isForLogin: widget.isForLogin,
               userCountry: widget.userCountry,
               userPhone: widget.phoneNumber,
+              referralCode: widget.referralCode,
               animation: StepTween(
                 begin: levelClock, // THIS IS A USER ENTERED NUMBER
                 end: 0,
@@ -133,6 +136,7 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
                   await AuthRepository.newRegisterUser(
                       context: context,
                       userCountry: widget.userCountry!,
+                      referralCode: widget.referralCode,
                       userPhone: widget.phoneNumber,
                       otp: otpController.text);
                 }
@@ -150,11 +154,13 @@ class _VerifyLoginScreenState extends State<VerifyLoginScreen> with TickerProvid
 class Countdown extends AnimatedWidget {
   Countdown({Key? key, required this.animation,required this.isForLogin,
   this.userCountry,
-  this.userPhone}) : super(key: key, listenable: animation);
+  this.userPhone,
+  this.referralCode}) : super(key: key, listenable: animation);
   Animation<int> animation;
   final bool isForLogin;
   final String? userCountry;
   final String? userPhone;
+  final String? referralCode;
   @override
   build(BuildContext context) {
     Duration clockTimer = Duration(seconds: animation.value);
@@ -171,7 +177,9 @@ class Countdown extends AnimatedWidget {
               AuthRepository.validateAndGetOTPForNewRegister(context: context,
               userCountry: userCountry,
               userPhone: userPhone??"",
-              isNeedNavigation: false);
+              isNeedNavigation: false,
+              referralCode: referralCode
+              );
             }
           },
           child: Text(

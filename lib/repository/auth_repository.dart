@@ -19,6 +19,7 @@ class AuthRepository {
     required BuildContext context,
     required String? userCountry,
     required String userPhone,
+    String? referralCode,
     bool isNeedNavigation = true,
   }) async {
     if (userCountry == null || userCountry.isEmpty) {
@@ -44,6 +45,7 @@ class AuthRepository {
               page: VerifyLoginScreen(
                 phoneNumber: userPhone,
                 userCountry: userCountry,
+                referralCode: referralCode,
                 isForLogin: false,
               ));
         }
@@ -61,9 +63,10 @@ class AuthRepository {
     required String userCountry,
     required String userPhone,
     required String otp,
+    String? referralCode
   }) async {
     showLoadingDialog(context: context);
-    APIResponse response = await HttpHandler.postMethod(context: context, url: APIEndpoints.createUser, data: {
+    Map<String,dynamic> requestData = {
       "user_country": userCountry,
       "user_phone": userPhone,
       "otp": otp,
@@ -73,7 +76,14 @@ class AuthRepository {
       "device_city": await LocalStorage.getString(key: AppConstant.deviceCity),
       "device_state": await LocalStorage.getString(key: AppConstant.deviceState),
       "device_country": await LocalStorage.getString(key: AppConstant.deviceCountry),
-    });
+
+    };
+
+    if(referralCode != null && referralCode != "")
+    {
+      requestData.addAll({"referral_code" : referralCode});
+    }
+    APIResponse response = await HttpHandler.postMethod(context: context, url: APIEndpoints.createUser, data: requestData );
     // if (response.isSuccess) {
     //   SimpleModel simpleModel = simpleModelFromJson(response.data);
     //   hideLoadingDialog(context: context);

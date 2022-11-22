@@ -29,6 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // TextEditingController lastNameController = TextEditingController();
   // TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController referralCodeController = TextEditingController();
 
   CountriesModel? countriesModel;
   String? userCountry;
@@ -106,7 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     (e) => Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                          "\t\t\t+${e.phonecode} ${e.nicename}",
+                                        "\t\t\t+${e.phonecode} ${e.nicename}",
                                         style: const TextStyle(color: Colors.black),
                                       ),
                                     ),
@@ -155,19 +156,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     isObscure: false,
                   ),
                   const SizedBox(height: 20),
+                  CommonTextField(
+                    title: "Referral Code",
+                    hintText: "Enter Referral Code",
+                    controller: referralCodeController,
+                    keyBoardType: TextInputType.number,
+                    iconChild: const SizedBox(),
+                    isObscure: false,
+                  ),
+                  const SizedBox(height: 20),
                   ButtonView(
                     title: "GET VERIFICATION CODE",
                     textColor: AppColors.whiteColor,
                     onTap: () async {
                       await AuthRepository.validateAndGetOTPForNewRegister(
                           context: context,
-                          // userFirstName: firstNameController.text,
-                          // userLastName: lastNameController.text,
-                          // userEmailAddress: emailController.text,
                           userCountry: userCountry,
-                          userPhone: phoneController.text);
-                      // PageNavigator.pushPage(
-                      //     context: context, page: const VerifyLoginScreen(phoneNumber: "test98@gmail.com", isForLogin: false));
+                          userPhone: phoneController.text,
+                          referralCode: referralCodeController.text,
+                          isNeedNavigation: true);
                     },
                   ),
                   const SizedBox(height: 20),
