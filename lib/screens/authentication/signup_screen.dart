@@ -4,7 +4,6 @@ import 'package:atm/config/app_images.dart';
 import 'package:atm/config/app_text_style.dart';
 import 'package:atm/models/authentication/countries_model.dart';
 import 'package:atm/repository/auth_repository.dart';
-import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/location_service.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
@@ -12,6 +11,7 @@ import 'package:atm/widgets/authentication/authentication_view.dart';
 import 'package:atm/widgets/common/button_view.dart';
 import 'package:atm/widgets/common/text_field_view.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
+import 'package:custom_searchable_dropdown/custom_searchable_dropdown.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -69,59 +69,83 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       topPadding: 10,
                       fontSize: 16),
                   const SizedBox(height: 30),
-
                   Text(
                     "Country",
                     style: AppTextStyle.descriptionTextStyle
                         .copyWith(color: AppColors.blackColor.withOpacity(0.5), fontSize: 16),
                   ),
-                  countriesModel != null
-                      ? Container(
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  countriesModel == null
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : CustomSearchableDropDown(
+                          items: countriesModel!.data.map((e) {
+                            return "+${e.phonecode} ${e.nicename}";
+                          }).toList(),
+                          label: 'Select Your Country',
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: AppColors.whiteColor,
                             border: Border.all(color: AppColors.primaryColor.withOpacity(0.1), width: 2),
                           ),
-                          child: Center(
-                            child: DropdownButton<String>(
-                              value: userCountry,
-                              focusColor: AppColors.redColor,
-                              underline: Container(),
-                              isExpanded: true,
-                              hint: const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text('\t\tSelect Your Country'),
-                              ),
-                              icon: const Icon(Icons.keyboard_arrow_down),
-                              items: countriesModel!.data.map((e) {
-                                return DropdownMenuItem(
-                                  value: e.nicename.toString(),
-                                  child: Text(
-                                    "\t\t\t+${e.phonecode} ${e.nicename}",
-                                    style: const TextStyle(color: Colors.black),
-                                  ),
-                                );
-                              }).toList(),
-                              selectedItemBuilder: (BuildContext context) => countriesModel!.data
-                                  .map(
-                                    (e) => Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "\t\t\t+${e.phonecode} ${e.nicename}",
-                                        style: const TextStyle(color: Colors.black),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  userCountry = newValue!;
-                                });
-                              },
-                            ),
-                          ),
-                        )
-                      : const LoadingView(),
+                          dropDownMenuItems: countriesModel!.data.map((e) {
+                            return "+${e.phonecode} ${e.nicename}";
+                          }).toList(),
+                          hint: "Select your country",
+                          onChanged: (value) {
+                            userCountry = value!;
+                          },
+                        ),
+                  // countriesModel != null
+                  //     ? Container(
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           color: AppColors.whiteColor,
+                  //           border: Border.all(color: AppColors.primaryColor.withOpacity(0.1), width: 2),
+                  //         ),
+                  //         child: Center(
+                  //           child: DropdownButton<String>(
+                  //             value: userCountry,
+                  //             focusColor: AppColors.redColor,
+                  //             underline: Container(),
+                  //             isExpanded: true,
+                  //             hint: const Align(
+                  //               alignment: Alignment.centerLeft,
+                  //               child: Text('\t\tSelect Your Country'),
+                  //             ),
+                  //             icon: const Icon(Icons.keyboard_arrow_down),
+                  //             items: countriesModel!.data.map((e) {
+                  //               return DropdownMenuItem(
+                  //                 value: e.nicename.toString(),
+                  //                 child: Text(
+                  //                   "\t\t\t+${e.phonecode} ${e.nicename}",
+                  //                   style: const TextStyle(color: Colors.black),
+                  //                 ),
+                  //               );
+                  //             }).toList(),
+                  //             selectedItemBuilder: (BuildContext context) => countriesModel!.data
+                  //                 .map(
+                  //                   (e) => Align(
+                  //                     alignment: Alignment.centerLeft,
+                  //                     child: Text(
+                  //                       "\t\t\t+${e.phonecode} ${e.nicename}",
+                  //                       style: const TextStyle(color: Colors.black),
+                  //                     ),
+                  //                   ),
+                  //                 )
+                  //                 .toList(),
+                  //             onChanged: (newValue) {
+                  //               setState(() {
+                  //                 userCountry = newValue!;
+                  //               });
+                  //             },
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : const LoadingView(),
 
                   // CommonTextField(
                   //   title: "First Name",

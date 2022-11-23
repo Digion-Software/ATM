@@ -6,6 +6,7 @@ import 'package:atm/models/common/api_response.dart';
 import 'package:atm/models/simple_model.dart';
 import 'package:atm/screens/authentication/login_screen.dart';
 import 'package:atm/screens/authentication/verify_login_screen.dart';
+import 'package:atm/screens/dashboard/dashboard_screen.dart';
 import 'package:atm/screens/onboarding/onboarding_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
@@ -31,7 +32,7 @@ class AuthRepository {
     } else {
       showLoadingDialog(context: context);
       APIResponse response = await HttpHandler.postMethod(context: context, url: APIEndpoints.newRegister, data: {
-        "user_country": userCountry,
+        "user_country": userCountry.contains(" ") ? userCountry.split(" ").last : userCountry,
         "is_app": AppConstant.isApp,
         "action": APIActions.sendOTP,
         "user_phone": userPhone
@@ -58,16 +59,15 @@ class AuthRepository {
     }
   }
 
-  static Future newRegisterUser({
-    required BuildContext context,
-    required String userCountry,
-    required String userPhone,
-    required String otp,
-    String? referralCode
-  }) async {
+  static Future newRegisterUser(
+      {required BuildContext context,
+      required String userCountry,
+      required String userPhone,
+      required String otp,
+      String? referralCode}) async {
     showLoadingDialog(context: context);
-    Map<String,dynamic> requestData = {
-      "user_country": userCountry,
+    Map<String, dynamic> requestData = {
+      "user_country": userCountry.contains(" ") ? userCountry.split(" ").last : userCountry,
       "user_phone": userPhone,
       "otp": otp,
       "device_id": await LocalStorage.getString(key: AppConstant.deviceId),
@@ -76,14 +76,13 @@ class AuthRepository {
       "device_city": await LocalStorage.getString(key: AppConstant.deviceCity),
       "device_state": await LocalStorage.getString(key: AppConstant.deviceState),
       "device_country": await LocalStorage.getString(key: AppConstant.deviceCountry),
-
     };
 
-    if(referralCode != null && referralCode != "")
-    {
-      requestData.addAll({"referral_code" : referralCode});
+    if (referralCode != null && referralCode != "") {
+      requestData.addAll({"referral_code": referralCode});
     }
-    APIResponse response = await HttpHandler.postMethod(context: context, url: APIEndpoints.createUser, data: requestData );
+    APIResponse response =
+        await HttpHandler.postMethod(context: context, url: APIEndpoints.createUser, data: requestData);
     // if (response.isSuccess) {
     //   SimpleModel simpleModel = simpleModelFromJson(response.data);
     //   hideLoadingDialog(context: context);
@@ -107,8 +106,14 @@ class AuthRepository {
       }
 
       LocalStorage.setBool(key: AppConstant.isLoggedIn, value: true);
-      LocalStorage.setBool(key: AppConstant.isIntroShow, value: true);
-      PageNavigator.pushAndRemoveUntilPage(context: context, page: const OnBoardingScreen());
+      if (await LocalStorage.getBool(key: AppConstant.isIntroShow) == null ||
+          await LocalStorage.getBool(key: AppConstant.isIntroShow) == true) {
+        LocalStorage.setBool(key: AppConstant.isIntroShow, value: true);
+        PageNavigator.pushAndRemoveUntilPage(context: context, page: const OnBoardingScreen());
+      } else {
+        LocalStorage.setBool(key: AppConstant.isIntroShow, value: false);
+        PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+      }
       showToast(msg: loginModel.message ?? "--", context: context);
     } else {
       hideLoadingDialog(context: context);
@@ -167,8 +172,14 @@ class AuthRepository {
         }
       }
       LocalStorage.setBool(key: AppConstant.isLoggedIn, value: true);
-      LocalStorage.setBool(key: AppConstant.isIntroShow, value: true);
-      PageNavigator.pushAndRemoveUntilPage(context: context, page: const OnBoardingScreen());
+      if (await LocalStorage.getBool(key: AppConstant.isIntroShow) == null ||
+          await LocalStorage.getBool(key: AppConstant.isIntroShow) == true) {
+        LocalStorage.setBool(key: AppConstant.isIntroShow, value: true);
+        PageNavigator.pushAndRemoveUntilPage(context: context, page: const OnBoardingScreen());
+      } else {
+        LocalStorage.setBool(key: AppConstant.isIntroShow, value: false);
+        PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+      }
       showToast(msg: loginModel.message ?? "--", context: context);
     } else {
       hideLoadingDialog(context: context);
@@ -189,6 +200,7 @@ class AuthRepository {
 
   static Future<void> logout(BuildContext context) async {
     await LocalStorage.clearStorage();
+    LocalStorage.setBool(key: AppConstant.isIntroShow, value: false);
     PageNavigator.pushAndRemoveUntilPage(context: context, page: const LoginScreen());
   }
 }

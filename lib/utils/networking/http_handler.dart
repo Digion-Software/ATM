@@ -119,6 +119,7 @@ class HttpHandler {
                 ElevatedButton(
                     onPressed: () async {
                       await LocalStorage.clearStorage();
+                      LocalStorage.setBool(key: AppConstant.isIntroShow, value: false);
                       PageNavigator.pushAndRemoveUntilPage(context: context, page: const LoginScreen());
                     },
                     style: ElevatedButton.styleFrom(
