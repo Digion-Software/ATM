@@ -59,8 +59,8 @@ class WithdrawalDatum {
   final String? planMonthlyMinReturn;
   final String? planMonthlyMaxReturn;
   final String? planBanner;
-  final int? invested;
-  final int? profit;
+  final double? invested;
+  final double? profit;
 
   WithdrawalDatum copyWith({
     String? planId,
@@ -70,8 +70,8 @@ class WithdrawalDatum {
     String? planMonthlyMinReturn,
     String? planMonthlyMaxReturn,
     String? planBanner,
-    int? invested,
-    int? profit,
+    double? invested,
+    double? profit,
   }) =>
       WithdrawalDatum(
         planId: planId ?? this.planId,
@@ -93,8 +93,8 @@ class WithdrawalDatum {
         planMonthlyMinReturn: json["plan_monthly_min_return"],
         planMonthlyMaxReturn: json["plan_monthly_max_return"],
         planBanner: json["plan_banner"],
-        invested: int.parse((json["invested"] ?? 0).toString()),
-        profit: int.parse((json["profit"] ?? 0).toString()),
+        invested: double.parse((json["invested"] ?? 0).toString()),
+        profit: double.parse((json["profit"] ?? 0).toString()),
       );
 
   Map<String, dynamic> toJson() => {

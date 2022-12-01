@@ -19,6 +19,7 @@ class CustomerSupportScreen extends StatefulWidget {
 
 class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
   TicketListModel? ticketListModel;
+
   @override
   void initState() {
     getAllTicket();
@@ -42,7 +43,10 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                       ticketListModel!.aaData!.length,
                       (index) => Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                        color: AppColors.whiteColor,
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteColor,
+                          borderRadius: BorderRadius.circular(10)
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -62,6 +66,12 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                                       style: AppTextStyle.descriptionTextStyle
                                           .copyWith(fontSize: 14, fontWeight: FontWeight.w400),
                                     ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      "Ticket ID : ${ticketListModel!.aaData![index].ticketChatId ?? ""}",
+                                      style: AppTextStyle.descriptionTextStyle
+                                          .copyWith(fontSize: 12, fontWeight: FontWeight.w600,color: AppColors.redColor),
+                                    ),
                                   ],
                                 ),
                                 const Spacer(),
@@ -71,15 +81,33 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                                       height: 25,
                                       width: 70,
                                       decoration: BoxDecoration(
-                                          color: ticketListModel!.aaData![index].status == "Open"
-                                              ? AppColors.greenColor
-                                              : AppColors.redColor,
-                                          borderRadius: BorderRadius.circular(3)),
+                                          color: AppColors.whiteColor, borderRadius: BorderRadius.circular(3)),
                                       child: Center(
-                                          child: Text(
-                                        ticketListModel!.aaData![index].status ?? "",
-                                        style: AppTextStyle.simpleTextStyle
-                                            .copyWith(fontSize: 9, color: AppColors.whiteColor),
+                                          child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Icon(
+                                            Icons.circle,
+                                            size: 6,
+                                            color: ticketListModel!.aaData![index].status == "Open"
+                                                ? AppColors.greenColor
+                                                : AppColors.redColor,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            ticketListModel!.aaData![index].status ?? "",
+                                            style: AppTextStyle.simpleTextStyle.copyWith(
+                                                fontSize: 12,
+                                                color: ticketListModel!.aaData![index].status == "Open"
+                                                    ? AppColors.greenColor
+                                                    : AppColors.redColor),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                        ],
                                       )),
                                     ),
                                     ticketListModel!.aaData![index].status == "Open"

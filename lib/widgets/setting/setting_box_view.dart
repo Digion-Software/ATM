@@ -45,7 +45,12 @@ class SettingBoxView extends StatelessWidget {
               const SizedBox(width: 15),
               SimpleTextView(data: title, fontWeight: FontWeight.w500),
               const Spacer(),
-              isKYC ? SimpleTextView(data: "KYC $kycStatus", fontSize: 10, textColor: AppColors.redColor) : Container(),
+              isKYC
+                  ? SimpleTextView(
+                      data: kycStatus == "" ? "Upload KYC" : "KYC $kycStatus",
+                      fontSize: 10,
+                      textColor: AppColors.redColor)
+                  : Container(),
               SizedBox(width: isKYC ? 15 : 0),
               const Icon(Icons.arrow_forward_ios, color: AppColors.greyColor, size: 22)
             ],

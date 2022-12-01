@@ -274,7 +274,8 @@ void showOptionForDeposit(
             }
           },
         ));
-  } else {
+  }
+  else {
     String paymentMethodForDeposit = await LocalStorage.getString(key: AppConstant.paymentMethodForDeposit) ?? "";
     if (paymentMethodForDeposit.toLowerCase() == "both") {
       showModalBottomSheet(

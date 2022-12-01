@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:atm/config/api_endpoints.dart';
 import 'package:atm/config/app_constant.dart';
 import 'package:atm/models/common/api_response.dart';
-import 'package:atm/models/faq/faq_model.dart';
 import 'package:atm/models/simple_model.dart';
 import 'package:atm/models/ticket/ticket_list_model.dart';
 import 'package:atm/models/ticket/ticket_option_model.dart';
@@ -127,15 +126,15 @@ class TicketRepository {
         file1Key: "attachment",
         file1Data: attachment);
     if (apiResponse.isSuccess) {
-      SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
+      // SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
       onSuccess(true);
       hideLoadingDialog(context: context);
-      showToast(msg: simpleModel.message, context: context);
+      // showToast(msg: simpleModel.message, context: context);
     } else {
-      SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
+      // SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
       onSuccess(true);
       hideLoadingDialog(context: context);
-      showToast(msg: simpleModel.message, context: context);
+      // showToast(msg: simpleModel.message, context: context);
     }
   }
 }

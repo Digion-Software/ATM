@@ -31,11 +31,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Need your camera permission for kyc and ticket picture.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>If user done kyc using India and then they live in USA, so we can indentify actual location of the user, there is no any other reason to get location details.</string>
+	<string>Need your location permission to verify your kyc and ticket issues.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>If user done kyc using India and then they live in USA, so we can indentify actual location of the user, there is no any other reason to get location details.</string>
+	<string>Need your location permission to verify your kyc and ticket issues.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>If user done kyc using India and then they live in USA, so we can indentify actual location of the user, there is no any other reason to get location details.</string>
+	<string>Need your location permission to verify your kyc and ticket issues.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need your camera permission for kyc and ticket picture.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

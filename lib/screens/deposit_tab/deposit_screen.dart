@@ -10,7 +10,6 @@ import 'package:atm/screens/withdraw/withdraw_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/type_strings.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
-import 'package:atm/widgets/common/divider_view.dart';
 import 'package:atm/widgets/common/network_image_view.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
 import 'package:atm/widgets/dashboard/dashboard_data_view.dart';
@@ -69,7 +68,7 @@ class _DepositScreenState extends State<DepositScreen> {
                                 title: "Active Plans",
                                 data: _dashboardModel!.activePlans == null
                                     ? "0"
-                                    : _dashboardModel!.activePlans!.toString(),
+                                    : _dashboardModel!.activePlans!.toStringAsFixed(0),
                               ),
                             ),
                             Expanded(

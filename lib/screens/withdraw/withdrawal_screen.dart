@@ -149,15 +149,15 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                     }
                   },
                   textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      contentPadding: EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      contentPadding: const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
                       hintText: "₹",
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
                       )),
                 ),
@@ -186,7 +186,9 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
               onTap: () async {
                 if (amountController.text.isEmpty || amountController.text == "₹") {
                   showToast(
-                      context: context, msg: "Please enter amount. Amount can not be greater then your balance.", isError: true);
+                      context: context,
+                      msg: "Please enter amount. Amount can not be greater then your balance.",
+                      isError: true);
                 } else if (amountController.text.contains(".") || amountController.text.contains("-")) {
                   showToast(context: context, msg: "Please enter valid amount", isError: true);
                 } else if (widget.withdrawalTo == "upi" && upiIdController.text.isEmpty) {

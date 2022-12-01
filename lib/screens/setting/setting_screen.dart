@@ -100,19 +100,21 @@ class _SettingScreenState extends State<SettingScreen> {
                     title: "Edit Profile",
                     icon: Icons.person,
                     onTap: () {
-                      PageNavigator.pushPage(
-                          context: context,
-                          page: EditProfile(
-                            profileDataModel: profileDataModel!,
-                            isUpdated: (v) async {
-                              if (v) {
-                                PageNavigator.pop(context: context);
-                                await getProfileData();
-                              }
-                            },
-                          )).whenComplete(() async {
-                        await getProfileData();
-                      });
+                      if (kycStatusModel!.kycStatus != null && kycStatusModel!.kycStatus!.toLowerCase() != "approved") {
+                        PageNavigator.pushPage(
+                            context: context,
+                            page: EditProfile(
+                              profileDataModel: profileDataModel!,
+                              isUpdated: (v) async {
+                                if (v) {
+                                  PageNavigator.pop(context: context);
+                                  await getProfileData();
+                                }
+                              },
+                            )).whenComplete(() async {
+                          await getProfileData();
+                        });
+                      }
                     },
                   ),
                   const SizedBox(height: 15),

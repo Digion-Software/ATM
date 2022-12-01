@@ -23,21 +23,21 @@ class DashboardModel {
   final String? status;
   final List<PlanDatum>? planData;
   final List<SliderDatum>? sliderData;
-  final int? activePlans;
-  final int? totalCapital;
-  final int? totalEarning;
-  final int? balance;
-  final int? walletBalance;
+  final double? activePlans;
+  final double? totalCapital;
+  final double? totalEarning;
+  final double? balance;
+  final double? walletBalance;
 
   DashboardModel copyWith({
     String? status,
     List<PlanDatum>? planData,
     List<SliderDatum>? sliderData,
-    int? activePlans,
-    int? totalCapital,
-    int? totalEarning,
-    int? balance,
-    int? walletBalance,
+    double? activePlans,
+    double? totalCapital,
+    double? totalEarning,
+    double? balance,
+    double? walletBalance,
   }) =>
       DashboardModel(
         status: status ?? this.status,
@@ -58,11 +58,11 @@ class DashboardModel {
         sliderData: json["slider_data"] == null
             ? null
             : List<SliderDatum>.from(json["slider_data"].map((x) => SliderDatum.fromJson(x))),
-        activePlans: int.parse((json["active_plans"] ?? 0).toString()),
-        totalCapital: int.parse((json["total_capital"] ?? 0).toString()),
-        totalEarning: int.parse((json["total_earning"] ?? 0).toString()),
-        balance: int.parse((json["balance"] ?? 0).toString()),
-        walletBalance: int.parse((json["wallet_balance"] ?? 0).toString()),
+        activePlans: double.parse((json["active_plans"] ?? 0).toString()),
+        totalCapital: double.parse((json["total_capital"] ?? 0).toString()),
+        totalEarning: double.parse((json["total_earning"] ?? 0).toString()),
+        balance: double.parse((json["balance"] ?? 0).toString()),
+        walletBalance: double.parse((json["wallet_balance"] ?? 0).toString()),
       );
 
   Map<String, dynamic> toJson() => {
@@ -97,8 +97,8 @@ class PlanDatum {
   final String? planMonthlyMinReturn;
   final String? planMonthlyMaxReturn;
   final String? planBanner;
-  final int? invested;
-  final int? profit;
+  final double? invested;
+  final double? profit;
 
   PlanDatum copyWith({
     String? planId,
@@ -108,8 +108,8 @@ class PlanDatum {
     String? planMonthlyMinReturn,
     String? planMonthlyMaxReturn,
     String? planBanner,
-    int? invested,
-    int? profit,
+    double? invested,
+    double? profit,
   }) =>
       PlanDatum(
         planId: planId ?? this.planId,
@@ -131,8 +131,8 @@ class PlanDatum {
         planMonthlyMinReturn: json["plan_monthly_min_return"],
         planMonthlyMaxReturn: json["plan_monthly_max_return"],
         planBanner: json["plan_banner"],
-        invested: int.parse((json["invested"] ?? 0).toString()),
-        profit: int.parse((json["profit"]??0).toString()),
+        invested: double.parse((json["invested"] ?? 0).toString()),
+        profit: double.parse((json["profit"]??0).toString()),
       );
 
   Map<String, dynamic> toJson() => {

@@ -189,8 +189,8 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SimpleTextView(
-                    data: "Moderate",
+                SimpleTextView(
+                    data: widget.withdrawalDatum!.planName??"",
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     topPadding: 20,
