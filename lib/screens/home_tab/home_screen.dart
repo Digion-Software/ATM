@@ -330,7 +330,7 @@ void showOptionForDeposit(
                               border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                           child: Row(
-                            children: const [Expanded(child: Text("ONLINE DEPOSITE")), Icon(Icons.arrow_forward_ios)],
+                            children: const [Expanded(child: Text("ONLINE\nDEPOSIT")), Icon(Icons.arrow_forward_ios)],
                           ),
                         ),
                       ),
@@ -360,7 +360,7 @@ void showOptionForDeposit(
                               border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(10)),
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                           child: Row(
-                            children: const [Expanded(child: Text("MANUAL DEPOSIT")), Icon(Icons.arrow_forward_ios)],
+                            children: const [Expanded(child: Text("MANUAL\nDEPOSIT")), Icon(Icons.arrow_forward_ios)],
                           ),
                         ),
                       ),

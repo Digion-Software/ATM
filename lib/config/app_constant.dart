@@ -38,6 +38,8 @@ class APIActions {
   static const String capitalWithdrawal = "capital_withdrawal";
   static const String profitWithdrawal = "profit_withdrawal";
   static const String ticketOption = "customer_support_subject";
+  static const String getDepositMethods = "get_deposit_methods";
+  static const String getCryptoMethods = "get_crypto_methods";
   static const String getPlanList = "get_plan_list";
   static const String requestOTP = "request_otp";
   static const String addTransfer = "add_transfer";

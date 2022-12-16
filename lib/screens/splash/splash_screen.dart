@@ -7,6 +7,7 @@ import 'package:atm/repository/app_update_repository.dart';
 import 'package:atm/screens/authentication/login_screen.dart';
 import 'package:atm/screens/dashboard/dashboard_screen.dart';
 import 'package:atm/screens/onboarding/onboarding_screen.dart';
+import 'package:atm/screens/payments/payments_methods_screen.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     _navigateToHome();
+    // Future.delayed(const Duration(seconds: 3),(){
+    //   PageNavigator.pushAndRemoveUntilPage(context: context, page: const PaymentsMethodsScreen(amount: 22.88,));
+    // });
     super.initState();
   }
 

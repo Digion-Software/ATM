@@ -33,7 +33,7 @@ class TicketRepository {
   }
 
   static Future<TicketOptionModel?> getTicketOption({required BuildContext context}) async {
-    APIResponse apiResponse = await HttpHandler.postMethod(url: APIEndpoints.ticketOption, context: context, data: {
+    APIResponse apiResponse = await HttpHandler.postMethod(url: APIEndpoints.commonAPI, context: context, data: {
       "is_app": AppConstant.isApp,
       "action": APIActions.ticketOption,
       "user_id": await LocalStorage.getString(key: AppConstant.userId),

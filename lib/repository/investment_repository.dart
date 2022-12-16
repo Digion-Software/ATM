@@ -9,7 +9,6 @@ import 'package:atm/models/investment_manage/investment_manage_model.dart';
 import 'package:atm/repository/payment_repository.dart';
 import 'package:atm/screens/dashboard/dashboard_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
-import 'package:atm/utils/common/show_logs.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
@@ -73,15 +72,13 @@ class InvestRepository {
       RazorpayPayment.paymentRequestOptions['amount'] = (int.parse(amount) * 100).toString();
       RazorpayPayment.paymentRequestOptions['name'] = razorPayConfigModel.data.razorpayData.name;
       RazorpayPayment.paymentRequestOptions['description'] = razorPayConfigModel.data.razorpayData.description;
-      if(await LocalStorage.getString(key: AppConstant.userDetails) != null)
-      {
+      if (await LocalStorage.getString(key: AppConstant.userDetails) != null) {
         LoginModel loginModel = loginModelFromJson(await LocalStorage.getString(key: AppConstant.userDetails) ?? "");
-        if(loginModel.userData != null) {
+        if (loginModel.userData != null) {
           RazorpayPayment.paymentRequestOptions['prefill']["contact"] = loginModel.userData!.userPhone;
-          if(loginModel.userData!.email.isNotEmpty) {
+          if (loginModel.userData!.email.isNotEmpty) {
             RazorpayPayment.paymentRequestOptions['prefill']["email"] = loginModel.userData!.email;
-          }
-          else{
+          } else {
             RazorpayPayment.paymentRequestOptions['prefill']["email"] = "ATM";
           }
         }
@@ -96,6 +93,69 @@ class InvestRepository {
         },
       );
       RazorpayPayment.openRazorpayPayment();
+    } else {
+      hideLoadingDialog(context: context);
+    }
+  }
+
+  static Future<void> investmentUPIManage(
+      {required BuildContext context,
+      required String amount,
+      required File? image,
+      required String planId,
+      required String depositMethod}) async {
+    showLoadingDialog(context: context);
+    APIResponse apiResponse = await HttpHandler.postMultiPartRequestMethod(
+        url: APIEndpoints.addDeposit,
+        file1Data: image,
+        file1Key: "deposit_proof",
+        data: {
+          "manual_deposit": "0",
+          "is_app": AppConstant.isApp.toString(),
+          "user_id": await LocalStorage.getString(key: AppConstant.userId) ?? "",
+          "auth_key": await LocalStorage.getString(key: AppConstant.token) ?? "",
+          "plan_id": planId,
+          "amount": amount,
+          "deposit_method": depositMethod,
+        });
+    if (apiResponse.isSuccess) {
+      hideLoadingDialog(context: context);
+      print("DATA : ${apiResponse.data}");
+      // InvestmentManageModel investmentManageModel = investmentManageModelFromJson(apiResponse.data);
+      // showToast(context: context, msg: investmentManageModel.message ?? "");
+      ///SHOW SUCCESS MESSAGE
+      PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+    } else {
+      ///SHOW FAILED MESSAGE
+      hideLoadingDialog(context: context);
+    }
+  }
+
+  static Future<void> investmentCryptoManage({
+    required BuildContext context,
+    required String amount,
+    required String planId,
+    required String depositMethod,
+    required String cryptoType,
+  }) async {
+    showLoadingDialog(context: context);
+    APIResponse apiResponse = await HttpHandler.postMethod(context: context, url: APIEndpoints.addDeposit, data: {
+      "manual_deposit": "0",
+      "is_app": AppConstant.isApp.toString(),
+      "user_id": await LocalStorage.getString(key: AppConstant.userId) ?? "",
+      "auth_key": await LocalStorage.getString(key: AppConstant.token) ?? "",
+      "plan_id": planId,
+      "amount": amount,
+      "deposit_method": depositMethod,
+      "crypto_type": cryptoType
+    });
+    if (apiResponse.isSuccess) {
+      hideLoadingDialog(context: context);
+      print("DATA : ${apiResponse.data}");
+      // InvestmentManageModel investmentManageModel = investmentManageModelFromJson(apiResponse.data);
+      // showToast(context: context, msg: investmentManageModel.message ?? "");
+      // PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+      ///GO FOR TIMER SCREEN
     } else {
       hideLoadingDialog(context: context);
     }

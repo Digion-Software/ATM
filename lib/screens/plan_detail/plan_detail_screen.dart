@@ -1,8 +1,8 @@
 import 'package:atm/config/app_colors.dart';
 import 'package:atm/models/app_update/razorpay_config_model.dart';
 import 'package:atm/models/withdrawal/get_withdrawal_list_model.dart';
-import 'package:atm/repository/investment_repository.dart';
 import 'package:atm/screens/deposit_tab/deposit_screen.dart';
+import 'package:atm/screens/payments/payments_methods_screen.dart';
 import 'package:atm/screens/plan_detail/add_deposit_proof_screen.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/common/type_strings.dart';
@@ -190,7 +190,7 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SimpleTextView(
-                    data: widget.withdrawalDatum!.planName??"",
+                    data: widget.withdrawalDatum!.planName ?? "",
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     topPadding: 20,
@@ -325,13 +325,19 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
                       int.parse(amountController.text.replaceAll("₹", "")) > 0 &&
                       double.parse(amountController.text.replaceAll("₹", "")) >=
                           double.parse(widget.withdrawalDatum!.planMinimumAmount ?? "500")) {
-                    await InvestRepository.investmentOnlineManage(
-                      context: context,
-                      amount: amountController.text.replaceAll("₹", ""),
-                      planId: widget.withdrawalDatum!.planId ?? "1",
-                      razorPayKey: widget.razorPayConfigModel.data.razorpayData.key,
-                      razorPayConfigModel: widget.razorPayConfigModel
-                    );
+                    PageNavigator.pushPage(
+                        context: context,
+                        page: PaymentsMethodsScreen(
+                          amount: double.parse(amountController.text.replaceAll("₹", "")),
+                          planId: widget.withdrawalDatum!.planId ?? "1",
+                        ));
+                    // await InvestRepository.investmentOnlineManage(
+                    //   context: context,
+                    //   amount: amountController.text.replaceAll("₹", ""),
+                    //   planId: widget.withdrawalDatum!.planId ?? "1",
+                    //   razorPayKey: widget.razorPayConfigModel.data.razorpayData.key,
+                    //   razorPayConfigModel: widget.razorPayConfigModel
+                    // );
                   } else {
                     showToast(context: context, msg: "Please enter correct amount!", isError: true);
                   }

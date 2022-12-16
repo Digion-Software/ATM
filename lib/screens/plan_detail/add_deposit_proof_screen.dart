@@ -58,16 +58,28 @@ class _AddDepositProofScreenState extends State<AddDepositProofScreen> {
                 textAlign: TextAlign.left),
           ),
           const SizedBox(height: 15),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              color: AppColors.primaryColor.withOpacity(0.2),
-              height: MediaQuery.of(context).size.width / 2,
-              width: MediaQuery.of(context).size.width / 2,
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: AppColors.primaryColor.withOpacity(0.2),
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 10,
+                      spreadRadius: 10,
+                      offset: const Offset(0, 0),
+                      color: AppColors.primaryColor.withOpacity(0.3))
+                ]),
+            height: MediaQuery.of(context).size.width / 2,
+            width: MediaQuery.of(context).size.width / 2,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 widget.razorPayConfigModel.data.upiQrcode,
                 height: MediaQuery.of(context).size.width / 2,
                 width: MediaQuery.of(context).size.width / 2,
+                fit: BoxFit.fill,
+                colorBlendMode: BlendMode.difference,
+                filterQuality: FilterQuality.high,
               ),
             ),
           ),
@@ -76,10 +88,14 @@ class _AddDepositProofScreenState extends State<AddDepositProofScreen> {
               borderRadius: BorderRadius.circular(10),
               color: AppColors.primaryColor.withOpacity(0.2),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: 10,),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
             margin: const EdgeInsets.symmetric(vertical: 10),
             child: DescriptionTextView(
-              data: widget.razorPayConfigModel.data.upiId.isEmpty ? "-- UPI ID -- " : widget.razorPayConfigModel.data.upiId,
+              data: widget.razorPayConfigModel.data.upiId.isEmpty
+                  ? "-- UPI ID -- "
+                  : widget.razorPayConfigModel.data.upiId,
               textColor: AppColors.primaryColor,
               topPadding: 15,
               bottomPadding: 15,
@@ -89,8 +105,8 @@ class _AddDepositProofScreenState extends State<AddDepositProofScreen> {
             onTap: uploadProofImage,
             child: Container(
               padding: EdgeInsets.symmetric(
-                vertical: MediaQuery.of(context).size.width / 5,
-                horizontal: MediaQuery.of(context).size.width / 5,
+                vertical: MediaQuery.of(context).size.width / 6.5,
+                horizontal: MediaQuery.of(context).size.width / 6.5,
               ),
               decoration: BoxDecoration(
                 border: Border.all(

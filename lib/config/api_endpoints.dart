@@ -45,6 +45,7 @@ class APIEndpoints {
 
   ///INVESTMENT
   static const String investmentManage = "investment_manage.php";
+  static const String addDeposit = "add_deposit.php";
 
   ///PAYMENT
   static const String paymentSuccess = "payment_success.php";
@@ -53,7 +54,7 @@ class APIEndpoints {
   ///FAQ AND SUPPORT
   static const String faq = "faq_details.php";
   static const String ticketList = "ticket_list.php";
-  static const String ticketOption = "common_api.php";
+  static const String commonAPI = "common_api.php";
   static const String createTicket = "customer_support.php";
   static const String viewTicketChat = "view_ticket.php";
   static const String replayTicket = "replay_ticket.php";
