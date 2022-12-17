@@ -1,9 +1,6 @@
 import 'package:atm/config/app_colors.dart';
-import 'package:atm/models/app_update/razorpay_config_model.dart';
 import 'package:atm/models/withdrawal/get_withdrawal_list_model.dart';
-import 'package:atm/screens/deposit_tab/deposit_screen.dart';
 import 'package:atm/screens/payments/payments_methods_screen.dart';
-import 'package:atm/screens/plan_detail/add_deposit_proof_screen.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/common/type_strings.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
@@ -14,12 +11,13 @@ import 'package:flutter/material.dart';
 
 class PlanDetailScreen extends StatefulWidget {
   const PlanDetailScreen(
-      {Key? key, required this.depositType, required this.razorPayConfigModel, required this.withdrawalDatum})
+      {Key? key, /*required this.depositType,*/ /*required this.razorPayConfigModel,*/ required this.withdrawalDatum})
       : super(key: key);
 
   final WithdrawalDatum? withdrawalDatum;
-  final DepositType depositType;
-  final RazorPayConfigModel razorPayConfigModel;
+
+  /*final DepositType depositType;*/
+  // final RazorPayConfigModel razorPayConfigModel;
 
   @override
   State<PlanDetailScreen> createState() => _PlanDetailScreenState();
@@ -95,6 +93,20 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
                       amountController.text = "₹${c.replaceAll("₹", "")}";
                       amountController.selection =
                           TextSelection.fromPosition(TextPosition(offset: amountController.text.length));
+                    }
+
+                    if(amountController.text.replaceAll("₹", "") == "500")
+                    {
+                      select = "500";
+                    }
+                    else if(amountController.text.replaceAll("₹", "") == "1000"){
+                      select = "1000";
+                    }
+                    else if(amountController.text.replaceAll("₹", "") == "5000"){
+                      select = "5000";
+                    }
+                    else{
+                      select = "";
                     }
                     if (mounted) {
                       setState(() {});
@@ -287,7 +299,33 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
           ButtonView(
               title: "NEXT",
               onTap: () async {
-                if (widget.depositType == DepositType.manual_deposit) {
+                if (amountController.text.isEmpty || amountController.text == "₹") {
+                  showToast(
+                      context: context, msg: "Please enter or select at least minimum amount of plan.", isError: true);
+                } else if (double.parse(amountController.text.replaceAll("₹", "")) <
+                    double.parse(widget.withdrawalDatum!.planMinimumAmount ?? "500")) {
+                  showToast(context: context, msg: "Please fill at least minimum amount of plan.", isError: true);
+                } else if (amountController.text.replaceAll("₹", "").isNotEmpty &&
+                    int.parse(amountController.text.replaceAll("₹", "")) > 0 &&
+                    double.parse(amountController.text.replaceAll("₹", "")) >=
+                        double.parse(widget.withdrawalDatum!.planMinimumAmount ?? "500")) {
+                  /*PageNavigator.pushPage(
+                        context: context,
+                        page: AddDepositProofScreen(
+                          razorPayConfigModel: widget.razorPayConfigModel,
+                          amount: amountController.text.replaceAll("₹", ""),
+                          withdrawalDatum: widget.withdrawalDatum,
+                        ));*/
+                  PageNavigator.pushPage(
+                      context: context,
+                      page: PaymentsMethodsScreen(
+                        amount: double.parse(amountController.text.replaceAll("₹", "")),
+                        planId: widget.withdrawalDatum!.planId ?? "1",
+                      ));
+                } else {
+                  showToast(context: context, msg: "Please enter correct amount!", isError: true);
+                }
+                /*if (widget.depositType == DepositType.manual_deposit) {
                   if (amountController.text.isEmpty || amountController.text == "₹") {
                     showToast(
                         context: context,
@@ -300,17 +338,24 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
                       int.parse(amountController.text.replaceAll("₹", "")) > 0 &&
                       double.parse(amountController.text.replaceAll("₹", "")) >=
                           double.parse(widget.withdrawalDatum!.planMinimumAmount ?? "500")) {
-                    PageNavigator.pushPage(
+                    */ /*PageNavigator.pushPage(
                         context: context,
                         page: AddDepositProofScreen(
                           razorPayConfigModel: widget.razorPayConfigModel,
                           amount: amountController.text.replaceAll("₹", ""),
                           withdrawalDatum: widget.withdrawalDatum,
+                        ));*/ /*
+                    PageNavigator.pushPage(
+                        context: context,
+                        page: PaymentsMethodsScreen(
+                          amount: double.parse(amountController.text.replaceAll("₹", "")),
+                          planId: widget.withdrawalDatum!.planId ?? "1",
                         ));
                   } else {
                     showToast(context: context, msg: "Please enter correct amount!", isError: true);
                   }
-                } else {
+                }
+                else {
                   if (amountController.text.isEmpty || amountController.text == "₹") {
                     showToast(
                         context: context,
@@ -341,7 +386,7 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
                   } else {
                     showToast(context: context, msg: "Please enter correct amount!", isError: true);
                   }
-                }
+                }*/
               },
               textColor: AppColors.whiteColor,
               leftMargin: 0,

@@ -50,7 +50,7 @@ class AuthRepository {
                 isForLogin: false,
               ));
         }
-        showToast(context: context, msg: simpleModel.message, isError: true);
+        showToast(context: context, msg: simpleModel.message);
       } else {
         hideLoadingDialog(context: context);
         SimpleModel simpleModel = simpleModelFromJson(response.data);

@@ -1,4 +1,3 @@
-
 import 'package:atm/config/app_colors.dart';
 import 'package:atm/config/app_text_style.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
@@ -19,7 +18,7 @@ class ButtonView extends StatelessWidget {
       this.rightMargin = 0,
       this.topMargin = 0,
       this.textColor,
-        this.buttonTextSize = 15,
+      this.buttonTextSize = 15,
       this.buttonColor = AppColors.primaryColor})
       : super(key: key);
 
@@ -55,7 +54,8 @@ class ButtonView extends StatelessWidget {
         child: Center(
           child: Text(
             title.toUpperCase(),
-            style: AppTextStyle.buttonTextStyle.copyWith(color: textColor,fontSize: buttonTextSize,fontWeight: FontWeight.bold),
+            style: AppTextStyle.buttonTextStyle
+                .copyWith(color: textColor, fontSize: buttonTextSize, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -65,12 +65,17 @@ class ButtonView extends StatelessWidget {
 
 class BackArrowButtonView extends StatelessWidget {
   const BackArrowButtonView(
-      {Key? key, this.icon = Icons.arrow_back_ios, this.color = AppColors.blackColor, this.isEnable = true})
+      {Key? key,
+      this.icon = Icons.arrow_back_ios,
+      this.color = AppColors.blackColor,
+      this.isEnable = true,
+      this.onPressed})
       : super(key: key);
 
   final IconData icon;
   final Color color;
   final bool isEnable;
+  final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +83,11 @@ class BackArrowButtonView extends StatelessWidget {
       child: InkWell(
         onTap: () {
           if (isEnable) {
-            PageNavigator.pop(context: context);
+            if (onPressed != null) {
+              onPressed!();
+            } else {
+              PageNavigator.pop(context: context);
+            }
           }
         },
         child: Icon(

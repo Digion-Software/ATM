@@ -49,7 +49,7 @@ class _PaymentProofUploadScreenState extends State<PaymentProofUploadScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffold(
-        title: widget.paymentType,
+        title: "Scan & Pay Using ${widget.paymentType}",
         child: Column(
           children: [
             Container(

@@ -6,8 +6,12 @@ import 'package:atm/models/app_update/razorpay_config_model.dart';
 import 'package:atm/models/authentication/login_model.dart';
 import 'package:atm/models/common/api_response.dart';
 import 'package:atm/models/investment_manage/investment_manage_model.dart';
+import 'package:atm/models/payments/crypto_response_model.dart';
+import 'package:atm/models/payments/deposit_status_model.dart';
+import 'package:atm/models/simple_model.dart';
 import 'package:atm/repository/payment_repository.dart';
 import 'package:atm/screens/dashboard/dashboard_screen.dart';
+import 'package:atm/screens/payments/crypto_response_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
 import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/local_storage/shared_preferences.dart';
@@ -110,7 +114,7 @@ class InvestRepository {
         file1Data: image,
         file1Key: "deposit_proof",
         data: {
-          "manual_deposit": "0",
+          "manual_deposit": "1",
           "is_app": AppConstant.isApp.toString(),
           "user_id": await LocalStorage.getString(key: AppConstant.userId) ?? "",
           "auth_key": await LocalStorage.getString(key: AppConstant.token) ?? "",
@@ -123,11 +127,16 @@ class InvestRepository {
       print("DATA : ${apiResponse.data}");
       // InvestmentManageModel investmentManageModel = investmentManageModelFromJson(apiResponse.data);
       // showToast(context: context, msg: investmentManageModel.message ?? "");
+      SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
+      showToast(context: context, msg: simpleModel.message);
+
       ///SHOW SUCCESS MESSAGE
       PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
     } else {
       ///SHOW FAILED MESSAGE
       hideLoadingDialog(context: context);
+      SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
+      showToast(context: context, msg: simpleModel.message, isError: true);
     }
   }
 
@@ -147,17 +156,54 @@ class InvestRepository {
       "plan_id": planId,
       "amount": amount,
       "deposit_method": depositMethod,
-      "crypto_type": cryptoType
+      "crypto_type": cryptoType.toUpperCase()
     });
     if (apiResponse.isSuccess) {
       hideLoadingDialog(context: context);
-      print("DATA : ${apiResponse.data}");
-      // InvestmentManageModel investmentManageModel = investmentManageModelFromJson(apiResponse.data);
-      // showToast(context: context, msg: investmentManageModel.message ?? "");
-      // PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+      // print("DATA : ${apiResponse.data}");
+      CryptoResponseModel cryptoResponseModel = cryptoResponseModelFromJson(apiResponse.data);
+      showToast(context: context, msg: cryptoResponseModel.message);
+      PageNavigator.pushAndRemoveUntilPage(
+          context: context,
+          page: CryptoResponseScreen(
+            cryptoData: cryptoResponseModelFromJson(apiResponse.data).data!,
+          ));
+
       ///GO FOR TIMER SCREEN
     } else {
       hideLoadingDialog(context: context);
+      SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
+      showToast(context: context, msg: simpleModel.message, isError: true);
     }
+  }
+
+  static Future<void> checkCryptoResponse({
+    required BuildContext context,
+    required String investmentId,
+    required String transactionId,
+  }) async {
+    APIResponse apiResponse =
+        await HttpHandler.postMethod(context: context, url: APIEndpoints.checkDepositStatus, data: {
+      "manual_deposit": "0",
+      "is_app": AppConstant.isApp.toString(),
+      "user_id": await LocalStorage.getString(key: AppConstant.userId) ?? "",
+      "auth_key": await LocalStorage.getString(key: AppConstant.token) ?? "",
+      "investment_id": investmentId,
+      "transaction_id": transactionId,
+    });
+    DepositStatusModel depositStatusModel = depositStatusModelFromJson(apiResponse.data);
+    if (depositStatusModel.depositStatus == "0") {
+      Future.delayed(const Duration(seconds: 10),() {
+        checkCryptoResponse(context: context,investmentId: investmentId,transactionId: transactionId);
+      },);
+    } else if (depositStatusModel.depositStatus == "1") {
+      showToast(context: context, msg: depositStatusModel.message);
+      PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+    }
+    else if (depositStatusModel.depositStatus == "2") {
+      showToast(context: context, msg: depositStatusModel.message);
+      PageNavigator.pushAndRemoveUntilPage(context: context, page: const DashboardScreen());
+    }
+
   }
 }

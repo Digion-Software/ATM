@@ -5,12 +5,17 @@ import 'package:atm/widgets/common/text_widgets.dart';
 import 'package:flutter/material.dart';
 
 class CommonScaffold extends StatelessWidget {
-  const CommonScaffold({Key? key, required this.title, required this.child,
-  this.horizontalPadding})
-      : super(key: key);
+  const CommonScaffold({
+    Key? key,
+    required this.title,
+    required this.child,
+    this.horizontalPadding,
+    this.onBackPressed,
+  }) : super(key: key);
   final String title;
   final Widget child;
   final double? horizontalPadding;
+  final Function()? onBackPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +34,16 @@ class CommonScaffold extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      const BackArrowButtonView(color: AppColors.whiteColor),
-                      TitleTextView(data: title, textColor: AppColors.whiteColor,
-                      fontSize: 24,topPadding: 15,bottomPadding: 15),
+                      BackArrowButtonView(
+                        color: AppColors.whiteColor,
+                        onPressed: onBackPressed,
+                      ),
+                      TitleTextView(
+                          data: title,
+                          textColor: AppColors.whiteColor,
+                          fontSize: 24,
+                          topPadding: 15,
+                          bottomPadding: 15),
                     ],
                   ),
                 ),

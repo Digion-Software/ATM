@@ -46,6 +46,7 @@ class APIEndpoints {
   ///INVESTMENT
   static const String investmentManage = "investment_manage.php";
   static const String addDeposit = "add_deposit.php";
+  static const String checkDepositStatus = "check_deposit_status.php";
 
   ///PAYMENT
   static const String paymentSuccess = "payment_success.php";
