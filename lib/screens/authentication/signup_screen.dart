@@ -53,6 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 AppImages.appLogo,
                 height: 120,
                 width: 120,
+                color: AppColors.whiteColor,
               ),
             ),
           ),

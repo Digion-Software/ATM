@@ -42,7 +42,10 @@ class TransactionView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
-                    child: Image.asset(AppImages.appLogo),
+                    child: Image.asset(
+                      AppImages.appLogo,
+                      color: AppColors.whiteColor,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -57,9 +60,10 @@ class TransactionView extends StatelessWidget {
                   ),
                 ),
                 SimpleTextView(
-                  data: "${data!.amount!.startsWith("-") ? "" : "+"}${getINRTypeValue(rupees: double.parse(data!.amount ?? "0"), decimalDigits: 2)}",
+                  data:
+                      "${data!.amount!.startsWith("-") ? "" : "+"}${getINRTypeValue(rupees: double.parse(data!.amount ?? "0"), decimalDigits: 2)}",
                   fontWeight: FontWeight.w600,
-                  textColor: data!.amount!.startsWith("-") ? AppColors.redColor:AppColors.greenColor,
+                  textColor: data!.amount!.startsWith("-") ? AppColors.redColor : AppColors.greenColor,
                   fontSize: 20,
                 ),
               ],

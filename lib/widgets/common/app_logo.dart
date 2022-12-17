@@ -1,3 +1,4 @@
+import 'package:atm/config/app_colors.dart';
 import 'package:atm/config/app_images.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,7 @@ class AppLogo extends StatelessWidget {
       ),
       child: Image.asset(
         AppImages.appLogo,
+        color: AppColors.whiteColor,
         height: height ?? MediaQuery.of(context).size.width / 5,
         width: width ?? MediaQuery.of(context).size.width,
       ),

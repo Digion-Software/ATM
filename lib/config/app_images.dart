@@ -15,6 +15,7 @@ class AppImages {
   static const String introTwo = "assets/image/intro-two.png";
   static const String introThree = "assets/image/intro-three.png";
   static const String introFour = "assets/image/intro-four.png";
+
   /// ICONS
   static const String menuIcon = "assets/icon/menu.png";
 }

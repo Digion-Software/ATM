@@ -34,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 AppImages.appLogo,
                 height: 120,
                 width: 120,
+                color: AppColors.whiteColor,
               ),
             ),
           ),

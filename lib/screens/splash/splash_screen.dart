@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:atm/config/app_colors.dart';
 import 'package:atm/config/app_constant.dart';
 import 'package:atm/config/app_images.dart';
 import 'package:atm/models/app_update/app_update_model.dart';
@@ -38,6 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
           AppImages.appLogo,
           height: 180,
           width: 180,
+          color: AppColors.whiteColor,
         ),
       ),
     );
