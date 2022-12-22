@@ -207,11 +207,10 @@ class _DepositScreenState extends State<DepositScreen> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              networkImageView(
-                                planData.planBanner ?? "",
-                                height: MediaQuery.of(context).size.height / 5,
-                                width: double.infinity,
-                              ),
+                              networkImageView(planData.planBanner ?? "",
+                                  height: MediaQuery.of(context).size.height / 5,
+                                  width: double.infinity,
+                                  boxFit: BoxFit.fill),
                               Container(
                                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                 child: Row(

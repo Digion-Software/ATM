@@ -1,23 +1,13 @@
 import 'package:atm/config/app_colors.dart';
-import 'package:atm/config/app_constant.dart';
 import 'package:atm/config/app_text_style.dart';
-import 'package:atm/models/app_update/razorpay_config_model.dart';
 import 'package:atm/models/dashboard/dashboard_model.dart';
 import 'package:atm/models/kyc/kyc_status_model.dart';
-import 'package:atm/models/profile/profile_data_model.dart';
-import 'package:atm/models/profile/profile_status_model.dart';
 import 'package:atm/models/withdrawal/get_withdrawal_list_model.dart';
-import 'package:atm/repository/app_update_repository.dart';
 import 'package:atm/repository/home_repository.dart';
 import 'package:atm/repository/kyc_repository.dart';
-import 'package:atm/repository/profile_repository.dart';
-import 'package:atm/screens/deposit_tab/deposit_screen.dart';
 import 'package:atm/screens/plan_detail/plan_detail_screen.dart';
-import 'package:atm/screens/profile/edit_profile_screen.dart';
 import 'package:atm/utils/common/loading_view.dart';
-import 'package:atm/utils/common/show_snack_bar.dart';
 import 'package:atm/utils/common/type_strings.dart';
-import 'package:atm/utils/local_storage/shared_preferences.dart';
 import 'package:atm/utils/navigation/page_navigator.dart';
 import 'package:atm/widgets/common/network_image_view.dart';
 import 'package:atm/widgets/common/text_widgets.dart';
@@ -139,11 +129,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              networkImageView(
-                                planData.planBanner ?? "",
-                                height: MediaQuery.of(context).size.height / 5,
-                                width: double.infinity,
-                              ),
+                              networkImageView(planData.planBanner ?? "",
+                                  height: MediaQuery.of(context).size.height / 5,
+                                  width: double.infinity,
+                                  boxFit: BoxFit.fill),
                               Container(
                                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                 child: Row(
@@ -225,7 +214,11 @@ InkWell investButton(
   return InkWell(
     onTap: () {
       // showOptionForDeposit(context: context, withdrawalDatum: withdrawalDatum, onComplete: onComplete);
-      PageNavigator.pushPage(context: context, page: PlanDetailScreen(withdrawalDatum: withdrawalDatum,));
+      PageNavigator.pushPage(
+          context: context,
+          page: PlanDetailScreen(
+            withdrawalDatum: withdrawalDatum,
+          ));
     },
     child: Container(
       decoration: BoxDecoration(
