@@ -222,7 +222,7 @@ class _TransferPlanScreenState extends State<TransferPlanScreen> {
                     title: "Transfer plan",
                     textColor: AppColors.whiteColor,
                     onTap: () {
-                      PageNavigator.pop(context: context);
+                      // PageNavigator.pop(context: context);
                       TransferPlanRepository.internalTransferPlanOTP(
                           context: context, planId: planId, toPlanId: toPlanId, amount: amountController.text);
                     },

@@ -108,7 +108,7 @@ class _TransferPlanVerificationScreenState extends State<TransferPlanVerificatio
             onTap: () async {
               TransferPlanRepository.addTransferPlan(
                 context: context,
-                otpCode: "989898",
+                otpCode: otpController.text,
                 planId: widget.planId,
                 toPlanId: widget.toPlanId,
                 amount: widget.amount,

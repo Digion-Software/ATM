@@ -45,9 +45,9 @@ class TransferPlanRepository {
       "auth_key": await LocalStorage.getString(key: AppConstant.token),
     });
     if (apiResponse.isSuccess) {
-      SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
       hideLoadingDialog(context: context);
-      showToast(msg: simpleModel.message, context: context);
+      SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
+      PageNavigator.pop(context: context);
       PageNavigator.pushPage(
           context: context,
           page: TransferPlanVerificationScreen(
@@ -55,6 +55,7 @@ class TransferPlanRepository {
             toPlanId: toPlanId,
             amount: amount,
           ));
+      showToast(msg: simpleModel.message, context: context);
     } else {
       SimpleModel simpleModel = simpleModelFromJson(apiResponse.data);
       hideLoadingDialog(context: context);

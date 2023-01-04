@@ -1,8 +1,8 @@
 class AppConstant {
   AppConstant._();
 
-  static const String androidAppVersion = "1";
-  static const String iosAppVersion = "1";
+  static const String androidAppVersion = "2";
+  static const String iosAppVersion = "2";
   static const int isApp = 1;
 
   //AUTHENTICATION AND USER DETAILS
